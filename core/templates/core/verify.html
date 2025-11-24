@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تأیید کد</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+        <section>
+{% if messages %}
+  <div class="messages-container fixed top-6 right-6 z-50 flex flex-col gap-4 max-w-sm">
+    {% for message in messages %}
+      <div
+        class="message rounded-xl px-6 py-4 shadow-lg text-base font-semibold flex items-center gap-4
+               {{ message.tags }}"
+        role="alert"
+      >
+        <span class="message-icon text-lg">
+          {% if 'success' in message.tags %}✔{% elif 'error' in message.tags %}✖{% elif 'warning' in message.tags %}⚠{% else %}ℹ{% endif %}
+        </span>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+</section>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>کد تأیید ✉️</h1>
+                <p>کد ارسال شده به شماره <span id="phoneNumber" class="phone-display"></span> را وارد کنید</p>
+            </div>
+
+<form action="{% url 'verify_otp' %}" method="post" id="otpForm" class="auth-form">
+    {% csrf_token %}
+    <div class="otp-box">
+        <input type="text" name="code" id="otpInput" maxlength="6" pattern="\d{6}" inputmode="numeric" required placeholder="••••••">
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        تأیید و ورود
+    </button>
+</form>
+
+<style>
+.auth-form {
+    max-width: 320px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.otp-box input {
+    width: 100%;
+    padding: 15px;
+    font-size: 24px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    letter-spacing: 10px; /* فاصله بین اعداد شبیه OTP */
+    outline: none;
+    transition: border 0.2s;
+}
+
+.otp-box input:focus {
+    border-color: #007bff;
+}
+.btn-primary {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+</style>
+
+<script>
+// اختیاری: وقتی عدد وارد شد، فقط اعداد بپذیره
+const otpInput = document.getElementById('otpInput');
+otpInput.addEventListener('input', () => {
+    otpInput.value = otpInput.value.replace(/[^0-9]/g, '');
+});
+</script>
+
+
+            <div class="auth-footer">
+                <p>شماره را اشتباه وارد کردید؟ <a href="{% url 'request_otp' %}">بازگشت</a></p>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+<!--    <script src="{% static 'scripts/script.js' %}"></script>-->
+</body>
+</html>
+

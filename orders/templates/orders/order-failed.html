@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرداخت ناموفق</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="auth-container confirmation-container">
+        <div class="auth-card confirmation-card">
+            <div class="confirmation-icon">
+                <div class="error-circle">
+                    <span>✕</span>
+                </div>
+            </div>
+
+            <div class="auth-header">
+                <h1>پرداخت ناموفق بود! ❌</h1>
+                <p>متأسفانه پرداخت شما انجام نشد</p>
+            </div>
+
+            <div class="confirmation-details">
+                <div class="detail-box">
+                    <div class="detail-icon">🆔</div>
+                    <div class="detail-content">
+                        <span class="detail-label">شماره سفارش:</span>
+                        <span class="detail-value order-id-confirm" id="orderIdFailed">#ORD-{{ order.id }}</span>
+                    </div>
+                </div>
+
+                <div class="detail-box error-box">
+                    <div class="detail-icon">⚠️</div>
+                    <div class="detail-content">
+                        <span class="detail-label">علت خطا:</span>
+                        <span class="detail-value" id="errorReason">عدم تأیید تراکنش توسط بانک</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirmation-message">
+                <div class="message-box error-message-box">
+                    <div class="message-icon">💡</div>
+                    <div class="message-text">
+                        <p><strong>لطفاً دوباره تلاش کنید</strong></p>
+                        <p class="message-subtext">در صورت تکرار مشکل، با پشتیبانی تماس بگیرید</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirmation-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'order-detail' order.id %}'">
+                    <span>بازگشت به سفارش</span>
+                </button>
+                <a href="https://t.me/PersianGamesSupport" target="_blank" class="btn btn-primary">
+                    <span>تماس با پشتیبانی</span>
+                    <span class="btn-icon">→</span>
+                </a>
+            </div>
+
+            <div class="confirmation-footer">
+                <p>در صورت نیاز به کمک، با ما در تماس باشید 🙏</p>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        // Load order ID from URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const errorReason = urlParams.get('reason') || 'عدم تأیید تراکنش توسط بانک';
+
+            if (orderId) {
+                document.getElementById('orderIdFailed').textContent = `#ORD-${orderId}`;
+            } else {
+                // Generate random order ID if not provided
+                const randomId = Math.floor(Math.random() * 1000000000);
+                document.getElementById('orderIdFailed').textContent = `#ORD-${randomId}`;
+            }
+
+            document.getElementById('errorReason').textContent = errorReason;
+
+            // Add animation on load
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+

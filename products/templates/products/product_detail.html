@@ -1,0 +1,1711 @@
+{% extends '_base.html' %}
+{% load humanize %}
+{% block page_title %} پرشین گیمز|{{ product.title }} {% endblock %}
+
+
+{% block page_content %}
+    <div class="flex min-h-screen flex-col">
+      <main class="flex-grow bg-background pb-14 pt-36 xs:pt-36">
+        <div class="container">
+          <!-- Desktop Product Detail -->
+          <div class="hidden lg:block">
+            <!-- Breadcrumb -->
+            <div class="mb-6">
+              <nav
+                aria-label="Breadcrumb"
+                class="w-fit rounded-lg bg-muted px-4 py-4 shadow-base"
+              >
+                <ol
+                  class="flex flex-wrap items-center justify-center gap-x-2 gap-y-4"
+                >
+                  <li class="flex items-center gap-x-2">
+                    <a class='text-sm text-text/90 hover: hover:' href="{% url 'home' %}">
+                      روتی کالا
+                    </a>
+                    <span class="text-text/90">
+                      <svg class="h-5 w-5">
+                        <use xlink:href="#chevron-left" />
+                      </svg>
+                    </span>
+                  </li>
+                  <li class="flex items-center gap-x-2">
+                    <a href="{% url 'products' %}" class="text-sm text-text/90 hover: hover:">
+                      {{ product.category.name }}
+                    </a>
+                    <span class="text-text/90">
+                      <svg class="h-5 w-5">
+                        <use xlink:href="#chevron-left" />
+                      </svg>
+                    </span>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <!-- Product Detail Section -->
+            <div class="mb-6 rounded-lg bg-muted p-6 shadow-base">
+              <div class="mb-6 grid flex-grow grid-cols-12 gap-4">
+                <div class="col-span-4">
+                  <div class="min-w-fit space-y-2">
+                    <!-- Product other actions -->
+                    <div class="py-2">
+                      <div class="flex items-center gap-x-4">
+                        <!-- add to favorite -->
+
+                        <div>
+                          <button
+                            data-tooltip-target="add-to-favorite"
+                            type="button"
+                          >
+                            <svg class="h-6 w-6">
+                              <use xlink:href="#heart" />
+                            </svg>
+                          </button>
+                          <div
+                            id="add-to-favorite"
+                            role="tooltip"
+                            class="tooltip invisible absolute z-10 inline-block rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-zinc-800"
+                          >
+                            افزودن به علاقه‌مندی ها
+                          </div>
+                        </div>
+                        <!-- add to compare -->
+
+                        <div>
+                          <button
+                            data-tooltip-target="add-to-compare"
+                            type="button"
+                          >
+                            <svg class="h-6 w-6">
+                              <use xlink:href="#compare" />
+                            </svg>
+                          </button>
+                          <div
+                            id="add-to-compare"
+                            role="tooltip"
+                            class="tooltip invisible absolute z-10 inline-block rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-zinc-800"
+                          >
+                            افزودن به لیست مقایسه
+                          </div>
+                        </div>
+
+                        <!-- share on social -->
+                        <div>
+                          <button
+                            id="dropdownMenuCopySocialShareLink"
+                            data-dropdown-toggle="copy-social-share-link"
+                            data-tooltip-target="share-on-social"
+                            type="button"
+                          >
+                            <svg class="h-6 w-6">
+                              <use xlink:href="#social-share" />
+                            </svg>
+                          </button>
+                          <div
+                            id="share-on-social"
+                            role="tooltip"
+                            class="tooltip invisible absolute z-10 inline-block rounded-lg bg-zinc-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-zinc-800"
+                          >
+                            اشتراک گذاری
+                          </div>
+                          <!-- Dropdown menu -->
+                          <div
+                            class="z-10 !ml-5 hidden w-50 overflow-hidden rounded-lg border bg-muted shadow-base"
+                            id="copy-social-share-link"
+                          >
+                            <ul class="space-y-2 p-2">
+                              <li>
+                                <button
+                                  type="button"
+                                  data-link="https://www.google.com/"
+                                  onclick="copyToClipboardSocialShareDesktop(this)"
+                                  class="flex w-full items-center justify-between rounded-lg px-4 py-3 text-sky-500 hover:bg-sky-500/10 dark:text-sky-400 dark:hover:bg-sky-400/10"
+                                >
+                                  <div class="flex items-center gap-x-2">
+                                    <svg class="h-6 w-6">
+                                      <use xlink:href="#copy"></use>
+                                    </svg>
+                                    <span id="copyToClipboardSocialShareText">
+                                      کپی کردن لینک
+                                    </span>
+                                  </div>
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Main image -->
+                    <div>
+                      <img
+                        src="{{ product.image.url }}"
+                        alt=""
+                        class="mx-auto"
+                        loading="lazy"
+                      />
+                    </div>
+                    <!-- Gallery -->
+                    <div class="flex items-center justify-center gap-x-2">
+                      <!-- image -->
+                      {% for image in product.images.all %}
+                        <button
+                        type="button"
+                        data-modal-target="product-gallery-modal"
+                        data-modal-toggle="product-gallery-modal"
+                        class="cursor-pointer rounded-lg border p-1"
+                      >
+                        <img
+                          src="{{ image.image.url }}"
+                          alt=""
+                          class="h-16 w-16 xl:h-20 xl:w-20"
+                          loading="lazy"
+                        />
+                      </button>
+                        {% endfor %}
+                      <!-- Load more -->
+                        {% if product.images.count > 2 %}
+                      <button
+                        type="button"
+                        data-modal-target="product-gallery-modal"
+                        data-modal-toggle="product-gallery-modal"
+                        class="relative cursor-pointer rounded-lg border p-1"
+                      >
+                        <img
+                          src="{{ product.image.url }}"
+                          alt=""
+                          class="h-16 w-16 blur xl:h-20 xl:w-20"
+                          loading="lazy"
+                        />
+                        <span class=" ">
+                          <svg class="absolute inset-0 mx-auto my-auto h-6 w-6">
+                            <use xlink:href="#horizontal-dot" />
+                          </svg>
+                        </span>
+                      </button>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-span-8 flex min-h-full flex-col">
+                  <div class="mb-2 flex items-center gap-x-1 text-primary">
+                    <a href="#"> {{ product.category.name }} </a>
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </div>
+                  <!-- Main Title ( persian ) -->
+                  <h1 class="mb-4 text-lg font-semibold">
+                    {{ product.title }}
+                  </h1>
+
+                  <div class="grid flex-grow grid-cols-2 gap-x-4">
+                    <!-- right side -->
+                    <div class="col-span-1">
+                      <!-- Title ( english) -->
+                      <div class="mb-4 flex items-center gap-x-2">
+                        <h2
+                          class="line-clamp-1 text-sm font-light text-text/60"
+                        >
+                            {{ product.title2 }}
+                        </h2>
+                        <span
+                          class="h-px flex-grow bg-background dark:bg-muted/10"
+                        ></span>
+                      </div>
+                      <!-- comments & SKU -->
+                      <div
+                        class="mb-4 flex items-center gap-x-4 text-sm font-light text-primary"
+                      >
+                        <div>
+                          <a href="#"> کد کالا {{ product.id }}# </a>
+                        </div>
+                        <span
+                          class="h-4 w-px rounded-full bg-background dark:bg-muted/10"
+                        ></span>
+                        <div>
+                          <a href="#"> {{ comments.count }} دیدگاه </a>
+                        </div>
+                      </div>
+                      <!-- users suggestion -->
+                      <div class="mb-4 flex gap-x-2">
+                        <svg class="h-4 w-4 text-primary">
+                          <use xlink:href="#like" />
+                        </svg>
+                        <p class="text-sm font-light text-text/60">
+                          80% از خریداران، خرید این کالا را پیشنهاد کرده‌اند
+                        </p>
+                      </div>
+
+                      <!-- Property -->
+                      <div>
+                        <p class="mb-6 font-medium">ویژگی های محصول</p>
+
+                        <ul class="space-y-4">
+                            {% for feature in product.features.all|slice:4 %}
+                          <li class="flex gap-x-2">
+                            <div class="min-w-fit text-text/60">{{ feature.key }} :</div>
+                            <div class="text-text/90">{{ feature.value }}</div>
+                          </li>
+                            {% endfor %}
+
+                        </ul>
+                      </div>
+
+                    </div>
+
+                    <!-- left side -->
+                    <div class="col-span-1 flex flex-col">
+<form action="{% url 'cart-add' product.slug %}" method="post" class="col-span-1 flex flex-col">
+  {% csrf_token %}
+
+  {% if product.type == 'A' %}
+    <!-- انتخاب ظرفیت -->
+    <div class="mb-6 space-y-3">
+      <label for="desktop-capacity" class="text-text/90">انتخاب ظرفیت اکانت</label>
+
+      <div class="relative">
+        <select
+          id="desktop-capacity"
+          name="capacity"
+          required
+          class="w-full appearance-none rounded-2xl border border-border/50 bg-background p-4 pr-10 text-text shadow-base
+                 focus:border-emerald-500 dark:focus:border-emerald-400 dark:border-white/10 transition"
+        >
+          {% for capacity in product.capacity.all %}
+            <option
+              value="{{ capacity.id }}"
+              data-price="{{ capacity.price }}"
+              data-discount="{{ capacity.discount }}"
+              data-final="{{ capacity.final_price }}"
+            >
+              {{ capacity.platform }} {{ capacity.capacity }} |
+              {% if capacity.discount %}
+                {{ capacity.price|intcomma }}
+                ← {{ capacity.final_price|floatformat:0|intcomma }} تومان
+              {% else %}
+                {{ capacity.price|intcomma }} تومان
+              {% endif %}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  {% else %}
+    <!-- برای محصولات غیر نوع A -->
+    <input type="hidden" name="capacity" value="">
+  {% endif %}
+
+  <!-- verified text -->
+  <div class="mb-6 flex items-center gap-x-2 rounded-lg bg-primary/10 p-4 text-sm text-primary/80">
+    <svg class="h-6 w-6">
+      <use xlink:href="#verified" />
+    </svg>
+    {% if product.type == 'P' %}
+      <b>تضمین سلامت فیزیکی و اصالت کالا</b>
+    {% else %}
+      <b>گارانتی مادام العمر پرشین گیم</b>
+    {% endif %}
+  </div>
+
+  <!-- قیمت و تعداد -->
+  <div class="mb-6 flex items-center justify-between">
+    <!-- انتخاب تعداد -->
+    <div class="flex h-12 w-32 items-center justify-between rounded-lg border px-4 py-1">
+      <button type="button" data-action="decrement">
+        <svg class="h-6 w-6 text-red-600 dark:text-red-500">
+          <use xlink:href="#minus" />
+        </svg>
+      </button>
+
+      <input
+        id="quantity"
+        name="quantity"
+        value="1"
+        type="number"
+        min="1"
+        class="flex h-6 w-12 select-none items-center justify-center bg-transparent text-center outline-none"
+      />
+
+      <button type="button" data-action="increment">
+        <svg class="h-6 w-6 text-primary">
+          <use xlink:href="#plus" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- قیمت -->
+    {% if product.type == "A" %}
+      <div class="flex items-center gap-x-1 text-primary">
+        <!-- قیمت قبلی و درصد تخفیف -->
+        <div id="desktop-old-box" class="flex items-center gap-x-2" style="display:none;">
+          <del id="desktop-old-price" class="text-sm text-text/60 decoration-warning">0</del>
+          <div id="desktop-discount"
+               class="flex w-10 items-center justify-center rounded-full bg-warning py-0.5 text-xs font-bold text-white dark:bg-red-600">
+            0%
+          </div>
+        </div>
+
+        <!-- قیمت نهایی -->
+        <span id="desktop-final-price" class="text-xl font-bold">{{ product.price|intcomma }}</span>
+        <span>تومان</span>
+      </div>
+    {% else %}
+      <div class="flex items-center gap-x-1 text-primary">
+        {% if product.discount %}
+          <div class="flex items-center gap-x-2">
+            <del class="text-sm text-text/60 decoration-warning">
+              {{ product.price|floatformat:0|intcomma }}
+            </del>
+            <div class="flex w-10 items-center justify-center rounded-full bg-warning py-0.5 text-xs font-bold text-white dark:bg-red-600">
+              {{ product.discount }}
+            </div>
+          </div>
+        {% endif %}
+        <span class="text-xl font-bold">
+          {{ product.get_final_price|floatformat:0|intcomma }}
+        </span>
+        <span>تومان</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- دکمه افزودن -->
+  <div class="mb-6">
+    <button type="submit" class="btn-primary w-full py-3">
+      افزودن به سبد خرید
+    </button>
+  </div>
+</form>
+
+                    </div>
+
+                    </div>
+                  </div>
+                </div>
+                              <div class="flex justify-between gap-4">
+                <div
+                  class="flex w-full items-center gap-x-2 rounded-lg border px-2 py-4 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#refund" />
+                  </svg>
+                        گارانتی مادام العمر پرشین گیم
+                </div>
+                <div
+                  class="flex w-full items-center gap-x-2 rounded-lg border px-2 py-4 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#verified" />
+                  </svg>
+                  تضمین اصالت کالا
+                </div>
+                <div
+                  class="flex w-full items-center gap-x-2 rounded-lg border px-2 py-4 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#support" />
+                  </svg>
+                  پشتیبانی 24/7
+                </div>
+                <div
+                  class="flex w-full items-center gap-x-2 rounded-lg border px-2 py-4 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#fast-delivery" />
+                  </svg>
+                    {% if product.type == "P" %}
+                    ارسال با تیپاکس
+                    {% else %}
+                                      تحویل در سریع ترین زمان ممکن
+                    {% endif %}
+                </div>
+              </div>
+
+              </div>
+
+          </div>
+          <!-- Mobile Product Detail-->
+          <div class="lg:hidden">
+            <!-- breadcrumb -->
+            <div class="mb-6">
+              <nav
+                aria-label="Breadcrumb"
+                class="w-fit rounded-lg bg-muted px-4 py-4 shadow-base"
+              >
+                <ol
+                  class="flex flex-wrap items-center justify-center gap-x-2 gap-y-4"
+                >
+                  <li class="flex items-center gap-x-2">
+                    <a class='text-sm text-text/90 hover: hover:' href="{% url 'home' %}">
+                      روتی کالا
+                    </a>
+                    <span class="text-text/90">
+                      <svg class="h-5 w-5">
+                        <use xlink:href="#chevron-left" />
+                      </svg>
+                    </span>
+                  </li>
+                  <li class="flex items-center gap-x-2">
+                    <a href="{% url 'products' %}" class="text-sm text-text/90 hover: hover:">
+                      {{ product.category.name }}
+                    </a>
+                    <span class="text-text/90">
+                      <svg class="h-5 w-5">
+                        <use xlink:href="#chevron-left" />
+                      </svg>
+                    </span>
+                  </li>
+                </ol>
+              </nav>
+            </div>
+
+            <!-- Product Detail Section -->
+            <div class="mb-6 rounded-lg bg-muted p-4 shadow-base">
+              <!-- Product Gallery -->
+              <div class="relative mb-4">
+                <div class="swiper product-image-mobile-swiper">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                      <img
+                        src="{{ product.image.url }}"
+                        alt=""
+                        class="mx-auto"
+                        loading="lazy"
+                      />
+                    </div>
+                      {% for image in product.images.all %}
+                    <div class="swiper-slide">
+                      <img
+                        src="{{ image.image.url }}"
+                        alt=""
+                        class="mx-auto"
+                        loading="lazy"
+                      />
+                    </div>
+                      {% endfor %}
+                  </div>
+                  <div class="swiper-pagination text-left"></div>
+                </div>
+                <div class="absolute left-0 top-0 z-10">
+                  <div class="flex items-center gap-x-4">
+                    <!-- add to favorite -->
+                    <div>
+                      <button>
+                        <svg class="h-6 w-6">
+                          <use xlink:href="#heart" />
+                        </svg>
+                      </button>
+                    </div>
+                    <!-- add to compare -->
+                    <div>
+                      <button>
+                        <svg class="h-6 w-6">
+                          <use xlink:href="#compare" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <!-- share on social -->
+                    <div class="relative">
+                      <button
+                        type="button"
+                        onclick="copyToClipboardSocialShareMobile(this)"
+                        data-link="https://www.google.com/"
+                      >
+                        <svg class="h-6 w-6">
+                          <use xlink:href="#social-share" />
+                        </svg>
+                      </button>
+                      <div
+                        id="notify-copied-social-share-link-mobile"
+                        class="absolute left-0 top-full z-10 hidden w-24 rounded-lg bg-zinc-900 px-3 py-2 text-center text-sm font-medium text-white shadow-sm transition-opacity duration-300 dark:bg-zinc-800"
+                      >
+                        کپی شد !
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- breadcrumb -->
+              <div class="mb-4 flex flex-wrap items-center gap-2">
+                <div
+                  class="flex items-center gap-x-1 text-sm font-light text-primary md:text-base"
+                >
+                  <a href="{% url 'products' %}">{{ product.category.name }}</a> <svg class="h-5 w-5">
+                    <use xlink:href="#chevron-left" />
+                  </svg>
+                </div>
+              </div>
+              <!-- title -->
+              <div class="mb-4 font-semibold md:text-lg">
+                    {{ product.title }}
+              </div>
+              <!-- comments & SKU -->
+              <div
+                class="flex gap-x-4 text-sm font-light text-primary md:text-base"
+              >
+                <div>
+                  <a href="#"> کد کالا {{ product.id }} # </a>
+                </div>
+                <div>
+                  <a href="#"> {{ comments.count }} دیدگاه </a>
+                </div>
+              </div>
+              <div class="my-4 h-px w-full bg-background"></div>
+              <!-- variant -->
+<form action="{% url 'cart-add' product.slug %}" method="post">
+  {% csrf_token %}
+
+  {% if product.type == "A" %}
+    <div class="mb-6 space-y-4">
+      <div class="text-sm md:text-base">انتخاب ظرفیت اکانت</div>
+      <div class="relative">
+        <select
+          id="account-capacity"
+          name="capacity"
+          class="w-full appearance-none rounded-xl border border-border/50 bg-background p-4 pr-10 text-text shadow-base
+                 focus:border-primary dark:focus:border-primary-btn transition"
+        >
+          {% for capacity in product.capacity.all %}
+            <option
+              value="{{ capacity.id }}"
+              data-price="{{ capacity.price }}"
+              data-discount="{{ capacity.discount }}"
+              data-final="{{ capacity.final_price }}"
+            >
+              {{ capacity.platform }} {{ capacity.capacity }} | {{ capacity.price|intcomma }} تومان
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- انتخاب تعداد -->
+      <div class="mb-4 text-sm md:text-base">انتخاب تعداد</div>
+      <div class="flex h-12 w-40 items-center justify-between rounded-lg border px-4 py-1">
+        <button type="button" data-action="decrement">
+          <svg class="h-7 w-7 text-red-600 dark:text-red-500">
+            <use xlink:href="#minus" />
+          </svg>
+        </button>
+
+        <input
+          value="1"
+          name="quantity"
+          type="number"
+          min="1"
+          class="flex h-6 w-full select-none items-center justify-center bg-transparent text-center outline-none"
+        />
+
+        <button type="button" data-action="increment">
+          <svg class="h-7 w-7 text-primary">
+            <use xlink:href="#plus" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  {% else %}
+    <!-- برای محصول غیر A، hidden input ارسال شود -->
+        <div class="mb-6 space-y-4">
+      <!-- انتخاب تعداد -->
+      <div class="mb-4 text-sm md:text-base">انتخاب تعداد</div>
+      <div class="flex h-12 w-40 items-center justify-between rounded-lg border px-4 py-1">
+        <button type="button" data-action="decrement">
+          <svg class="h-7 w-7 text-red-600 dark:text-red-500">
+            <use xlink:href="#minus" />
+          </svg>
+        </button>
+
+        <input
+          value="1"
+          name="quantity"
+          type="number"
+          min="1"
+          class="flex h-6 w-full select-none items-center justify-center bg-transparent text-center outline-none"
+        />
+
+        <button type="button" data-action="increment">
+          <svg class="h-7 w-7 text-primary">
+            <use xlink:href="#plus" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <input type="hidden" name="capacity" value="">
+  {% endif %}
+
+  <!-- اطلاعات گارانتی و ویژگی‌ها -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-6">
+    <div class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60">
+      <svg class="h-5 w-5"><use xlink:href="#refund" /></svg>
+      گارانتی مادام العمر پرشین گیم
+    </div>
+    <div class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60">
+      <svg class="h-6 w-6"><use xlink:href="#verified" /></svg>
+      تضمین اصالت کالا
+    </div>
+    <div class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60">
+      <svg class="h-6 w-6"><use xlink:href="#support" /></svg>
+      پشتیبانی 24/7
+    </div>
+    <div class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60">
+      <svg class="h-6 w-6"><use xlink:href="#fast-delivery" /></svg>
+      {% if product.type == "P" %}
+        ارسال با تیپاکس
+      {% else %}
+        تحویل در سریع ترین زمان ممکن
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ویژگی‌های محصول -->
+  <div class="mb-6 rounded-lg bg-muted p-4 shadow-base lg:hidden">
+    <p class="mb-6">ویژگی های محصول</p>
+    <ul class="space-y-4">
+      {% for feature in product.features.all %}
+        <li class="flex gap-x-2">
+          <div class="min-w-fit text-sm text-text/60">{{ feature.key }} :</div>
+          <div class="text-sm text-text/90">{{ feature.value }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- دکمه افزودن به سبد خرید + قیمت -->
+  <div class="fixed inset-x-0 bottom-0 z-10 bg-muted p-5">
+    <div class="flex items-center justify-between gap-x-6">
+      <button class="btn-primary w-full px-4 py-3 text-sm">افزودن به سبد خرید</button>
+      <div class="space-y-1">
+        <div id="old-price-box" class="flex items-center gap-x-2" style="display:none;">
+          <div>
+            <del id="old-price" class="text-sm text-text/60 decoration-warning md:text-base">0</del>
+          </div>
+          <div id="discount-badge" class="flex w-10 items-center justify-center rounded-full bg-warning py-0.5 text-sm font-bold text-white dark:bg-red-600">0%</div>
+        </div>
+        <div class="text-primary">
+          <span class="font-semibold" id="final-price">{{ product.price|intcomma }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div
+                  class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60"
+                >
+                  <svg class="h-5 w-5">
+                    <use xlink:href="#refund" />
+                  </svg>
+                  هفت روز ضمانت بازگشت کالا
+                </div>
+
+                <div
+                  class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#verified" />
+                  </svg>
+                  تضمین اصالت کالا
+                </div>
+                <div
+                  class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#support" />
+                  </svg>
+                  هفت روز هفته
+                </div>
+                <div
+                  class="flex items-center gap-x-2 rounded-lg border px-4 py-3 text-sm text-text/60"
+                >
+                  <svg class="h-6 w-6">
+                    <use xlink:href="#fast-delivery" />
+                  </svg>
+                  تحویل اکسپرس در تهران, کرج
+                </div>
+              </div>
+            </div>
+            <!-- Property -->
+            <div class="mb-6 rounded-lg bg-muted p-4 shadow-base lg:hidden">
+              <p class="mb-6">ویژگی های محصول</p>
+
+              <ul class="space-y-4">
+                                              {% for feature in product.features.all %}
+                <li class="flex gap-x-2">
+                  <div class="min-w-fit text-sm text-text/60">{{ feature.key }} :</div>
+                  <div class="text-sm text-text/90">{{ feature.value }}</div>
+                </li>
+                  {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Add to Cart -->
+          </div>
+            {% if related_products %}
+<div class="mb-6">
+  <div>
+    <!-- Section Header -->
+    <div class="mb-4 flex items-center justify-between">
+      <h3 class="font-medium md:text-lg lg:text-xl">کالاهای مرتبط</h3>
+    </div>
+
+    {% if related_products %}
+    <div class="swiper product-slider p-px">
+      <div class="swiper-wrapper">
+        {% for rp in related_products %}
+        <div class="swiper-slide">
+
+          <!-- Product Card -->
+          <div
+            class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base"
+          >
+            <div class="relative rounded-xl bg-muted p-2 shadow-base md:p-5 h-full flex flex-col">
+
+              <!-- image with fixed height -->
+              <div class="mb-2 md:mb-5 h-40 flex items-center justify-center overflow-hidden">
+                <a href="{{ rp.get_absolute_url }}">
+                  <img
+                    alt=""
+                    class="object-contain h-full"
+                    src="{{ rp.image.url }}"
+                  />
+                </a>
+              </div>
+
+              <!-- title with fixed height -->
+              <div class="mb-2 min-h-[48px] md:min-h-[56px]">
+                <a class="line-clamp-2 text-sm md:text-base">
+                  {{ rp.title }}
+                </a>
+              </div>
+
+              <!-- Prices with fixed height -->
+              <div class="mt-auto min-h-[60px] flex flex-col justify-end">
+
+                {% if rp.discount %}
+                <div class="h-5 text-left">
+                  <del class="text-sm text-text/60 decoration-warning md:text-base">
+                    {{ rp.price|intcomma }}
+                  </del>
+                </div>
+                {% else %}
+                <!-- placeholder to keep equal height -->
+                <div class="h-5"></div>
+                {% endif %}
+
+                <div class="flex items-center justify-between">
+
+                  {% if rp.discount %}
+                  <div>
+                    <p
+                      class="w-9 rounded-full bg-warning py-px text-center text-sm text-white"
+                    >
+                      {{ rp.discount.value }}%
+                    </p>
+                  </div>
+                  {% endif %}
+
+                  <!-- New price -->
+                  <div class="text-sm font-bold text-primary md:text-base">
+                    {{ rp.get_final_price|floatformat:0|intcomma }}
+                    <span class="text-xs font-light md:text-sm">تومان</span>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+
+    </div>
+    {% endif %}
+  </div>
+</div>
+            {% endif %}
+          <!-- description / specs / commment  -->
+          <div class="rounded-lg bg-muted p-4 shadow-base">
+            <div class="mb-6">
+              <ul
+                class="-mb-px flex justify-between gap-x-2 border-b text-center text-sm font-medium xs:justify-start xs:gap-x-4 xs:text-base"
+              >
+                <li>
+                  <a
+                    href="#description"
+                    class="inline-block rounded-t-lg border-b-2 border-transparent px-2 pb-2 hover: text-text/90 dark:hover:text-zinc-300"
+                  >
+                    معرفی
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#specs"
+                    class="inline-block rounded-t-lg border-b-2 border-transparent px-2 pb-2 hover: text-text/90 dark:hover:text-zinc-300"
+                  >
+                    مشخصات
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#comments"
+                    class="relative inline-block rounded-t-lg border-b-2 border-transparent px-2 pb-2 hover: text-text/90 dark:hover:text-zinc-300"
+                  >
+                    دیدگاه ها
+                    <span
+                      class="absolute -left-5 -top-4 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs text-white dark:bg-emerald-600 xs:text-sm"
+                    >
+                      {{ comments.count }}
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="space-y-16 divide-y">
+              <div class="py-6" id="description">
+                <div class="relative mb-16 w-fit text-xl font-medium">
+                  معرفی
+                  <span
+                    class="absolute right-0 top-10 h-[3px] w-full rounded-full bg-primary"
+                  >
+                  </span>
+                </div>
+                <div
+                  class="mb-6 max-h-[500px] overflow-hidden md:mb-10"
+                  id="descriptionContainer"
+                >
+                  <div
+                    class="space-y-4 text-sm leading-loose text-text/90 lg:text-base"
+                  >
+{{ product.description }}
+                  </div>
+                </div>
+                <div class="flex justify-center">
+                  <button
+                    class="btn-secondary-nobg hidden md:flex"
+                    id="toggleDescriptionButton"
+                  >
+                    مشاهده بیشتر
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </button>
+                  <button
+                    id="descriptionButtonMobile"
+                    aria-controls="mobile-description-drawer-navigation"
+                    data-drawer-show="mobile-description-drawer-navigation"
+                    data-drawer-placement="bottom"
+                    data-drawer-target="mobile-description-drawer-navigation"
+                    type="button"
+                    class="btn-secondary-nobg md:hidden"
+                  >
+                    مشاهده بیشتر
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="py-6" id="specs">
+                <div class="relative mb-16 w-fit text-xl font-medium">
+                  مشخصات
+                  <span
+                    class="absolute right-0 top-10 h-[3px] w-full rounded-full bg-primary"
+                  >
+                  </span>
+                </div>
+                <div
+                  class="mb-6 max-h-[500px] overflow-hidden md:mb-10"
+                  id="specsContainer"
+                >
+                  <ul class="space-y-6 text-sm">
+                      {% for feature in product.features.all %}
+                    <li class="grid grid-cols-3 gap-x-2 lg:grid-cols-5">
+                      <div class="col-span-1 text-text/60">{{ feature.key }}</div>
+                      <div
+                        class="col-span-2 border-b pb-4 text-text/90 lg:col-span-4"
+                      >
+                        <ul class="space-y-4">
+                          <li>{{ feature.value }}</li>
+                        </ul>
+                      </div>
+                    </li>
+                        {% endfor %}
+                  </ul>
+                </div>
+                <div class="flex justify-center">
+                  <button
+                    class="btn-secondary-nobg hidden md:flex"
+                    id="toggleSpecsButton"
+                  >
+                    مشاهده بیشتر
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </button>
+                  <button
+                    id="specsButtonMobile"
+                    class="btn-secondary-nobg md:hidden"
+                    aria-controls="mobile-spec-drawer-navigation"
+                    data-drawer-show="mobile-spec-drawer-navigation"
+                    data-drawer-placement="bottom"
+                    data-drawer-target="mobile-spec-drawer-navigation"
+                    type="button"
+                  >
+                    مشاهده بیشتر
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="py-6" id="comments">
+                <div class="relative mb-16 w-fit text-xl font-medium">
+                  دیدگاه ها
+                  <span
+                    class="absolute right-0 top-10 h-[3px] w-full rounded-full bg-primary"
+                  >
+                  </span>
+                </div>
+
+                <div>
+                  <div class="grid grid-cols-12 gap-y-8 md:gap-8">
+                    <!-- Submit New Comment -->
+                    <div class="col-span-12 md:col-span-4 lg:col-span-3">
+                        <form action="{% url 'comment-add' product.slug %}" method="post">
+                            {% csrf_token %}
+                      <div class="grid grid-cols-2 gap-4 md:sticky md:top-32">
+                        <div class="text-lg">ثبت دیدگاه</div>
+                        <div class="col-span-2">
+                          <label
+                            for="name"
+                            class="relative block rounded-lg border shadow-base"
+                          >
+                            <input
+                              type="text"
+                              id="name"
+                              name="{{ comment_form.name.name  }}"
+                              class="peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0"
+                              placeholder="نام نمایشی"
+                            />
+
+                            <span
+                              class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/90 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
+                            >
+                                نام نمایشی
+                             </span>
+                          </label>
+                        </div>
+                        <div class="col-span-2">
+                          <!-- Suggestion -->
+                          <div class="mb-4 text-sm text-text/60">
+                            این محصول را به دیگران پیشنهاد
+                          </div>
+                          <fieldset class="flex items-center gap-4">
+                            <legend class="sr-only">Suggestion</legend>
+
+                            <div class="w-full">
+                              <input
+                                type="radio"
+                                name="recommend"
+                                value="suggest-like"
+                                id="suggest-like"
+                                class="peer hidden"
+                              />
+
+                              <label
+                                for="suggest-like"
+                                class="relative block cursor-pointer rounded-lg border p-2 shadow-base peer-checked:border-emerald-500 hover:border-border/50 peer-checked:dark:border-emerald-400 dark:hover:border-white/10"
+                              >
+                                <div
+                                  class="flex items-center gap-x-2 text-primary"
+                                >
+                                  <svg class="h-5 w-5">
+                                    <use xlink:href="#like" />
+                                  </svg>
+                                  <p class="text-sm xs:text-base">میکنم</p>
+                                </div>
+                              </label>
+                            </div>
+
+                            <div class="w-full">
+                              <input
+                                type="radio"
+                                name="suggest"
+                                value="suggest-dislike"
+                                id="suggest-dislike"
+                                class="peer hidden"
+                              />
+
+                              <label
+                                for="suggest-dislike"
+                                class="relative block cursor-pointer rounded-lg border p-2 shadow-base peer-checked:border-red-500 hover:border-border/50 peer-checked:dark:border-red-400 dark:hover:border-white/10"
+                              >
+                                <div
+                                  class="flex items-center gap-x-2 text-red-500 dark:text-red-400"
+                                >
+                                  <svg class="h-5 w-5">
+                                    <use xlink:href="#dislike" />
+                                  </svg>
+                                  <p class="text-sm xs:text-base">نمیکنم</p>
+                                </div>
+                              </label>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-span-2">
+                          <label
+                            for="content"
+                            class="relative block rounded-lg border shadow-base"
+                          >
+                            <textarea
+                              type="text"
+                              id="content"
+                              name="content"
+                              rows="3"
+                              class="main-scroll peer w-full rounded-lg border-none bg-transparent px-4 py-3 placeholder-transparent focus:outline-none focus:ring-0"
+                              placeholder="متن دیدگاه"
+                            ></textarea>
+
+                            <span
+                              class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-muted px-2 py-0.5 text-sm text-text/90 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-sm"
+                            >
+                              متن دیدگاه
+                            </span>
+                          </label>
+                        </div>
+                        <div class="col-span-2 flex justify-end">
+                          <button
+                            class="btn-primary w-full px-4 py-2 md:w-auto"
+                            type="submit"
+                          >
+                            ارسال دیدگاه
+                          </button>
+                        </div>
+                      </div>
+                            </form>
+
+                    </div>
+                    <!-- Comments -->
+                    <div
+                      class="order-first col-span-12 mb-10 max-h-[500px] overflow-hidden md:order-last md:col-span-8 lg:col-span-9"
+                      id="commentsContainer"
+                    >
+                      <!-- Desktop Comments -->
+                      <div class="hidden md:block">
+                        <ul
+                          class="mb-8 space-y-4 divide-y divide-gray-200 dark:divide-white/10"
+                        >
+                            {% if comments %}
+                            {% for comment in comments %}
+                          <li class="space-y-2">
+                            <div class="py-6">
+                              <div
+                                class="flex items-center justify-between gap-2"
+                              >
+                                <h5 class="mb-4 leading-relaxed xl:text-lg">
+                                {{ comment.name }}
+                                </h5>
+                              </div>
+                              <div
+                                class="mb-6 flex items-center gap-x-4 border-b pb-6"
+                              >
+                                  {% if comment.recommend %}
+                                <div
+                                  class="flex items-center gap-x-2 text-primary"
+                                >
+                                  <svg class="h-5 w-5">
+                                    <use xlink:href="#like" />
+                                  </svg>
+                                  پیشنهاد میکنم
+                                </div>
+                                  {% else %}
+                                <div
+                                  class="flex items-center gap-x-2 text-red-500 dark:text-red-400"
+                                >
+                                  <svg class="h-5 w-5">
+                                    <use xlink:href="#dislike" />
+                                  </svg>
+                                  پیشنهاد نمیکنم
+                                </div>
+                                    {% endif %}
+                                <div class="flex items-center gap-x-2">
+                                  <div class="text-sm text-text/60">
+                                    {{ comment.created_at }}
+                                  </div>
+                                  <span
+                                    class="h-3 w-px rounded-full bg-background dark:bg-muted/10"
+                                  ></span>
+                                    {% if user.is_staff %}
+                                  <div class="text-sm text-text/60">ادمین</div>
+                                    {% else %}
+                                    <div class="text-sm text-text/60">خریدار</div>
+                                    {% endif %}
+                                </div>
+                              </div>
+                              <div class="mb-6 border-b pb-6">
+                                <p class="line-clamp-4 text-sm text-text/90">
+                                  {{ comment.content }}
+                                </p>
+                              </div>
+                            </div>
+                            <!-- Answers -->
+                          </li>
+                            {% endfor %}
+                            {% else %}
+                                <p class="text-center text-sm text-gray-500 py-6">
+                                     هنوز هیچ کامنتی ثبت نشده. اولین نفر باشید!
+                                 </p>
+                            {% endif %}
+                        </ul>
+                        <!-- Pagination -->
+                      </div>
+                      <!-- Mobile Comments -->
+                      <div class="md:hidden">
+                        <div class="swiper product-comments-swiper">
+                          <div class="swiper-wrapper">
+                            <!-- Comment -->
+                              {% if comments %}
+                              {% for comment in comments %}
+                            <div class="swiper-slide">
+                              <div
+                                class="flex h-64 flex-col rounded-lg border px-4 py-6"
+                              >
+                                <!-- head -->
+                                <div
+                                  class="flex items-center justify-between gap-2 mb-4"
+                                >
+                                    {% if comment.recommend %}
+                                  <div
+                                    class="flex items-center gap-x-2 text-primary"
+                                  >
+                                    <svg class="h-5 w-5">
+                                      <use xlink:href="#like" />
+                                    </svg>
+                                    پیشنهاد میکنم
+                                  </div>
+                                    {% else %}
+                                <div
+                                  class="flex items-center gap-x-2 text-red-500 dark:text-red-400"
+                                >
+                                  <svg class="h-5 w-5">
+                                    <use xlink:href="#dislike" />
+                                  </svg>
+                                  پیشنهاد نمیکنم
+                                </div>
+                                    {% endif %}
+
+                                </div>
+                                <!-- Comment -->
+                                <div class="flex-grow space-y-2">
+                                  <h5 class="text-sm leading-relaxed">
+                                      {{ comment.name }}
+                                  </h5>
+
+                                  <p
+                                    class="line-clamp-4 text-sm leading-relaxed text-text/90"
+                                  >
+                                      {{ comment.content }}
+                                  </p>
+                                </div>
+                                <!-- Footer -->
+                                <div class="flex items-center justify-between">
+                                  <div class="flex items-center gap-x-2">
+                                    <div class="text-xs text-text/60">
+                                    {{ comment.created_at }}
+                                    </div>
+                                    <span
+                                      class="h-3 w-px rounded-full bg-background dark:bg-muted/10"
+                                    ></span>
+                                      {% if user.is_stuff %}
+                                    <div class="text-xs text-text/60">
+                                      ادمین
+                                    </div>
+                                      {% else %}
+                                    <div class="text-xs text-text/60">
+                                      خریدار
+                                    </div>
+                                      {% endif %}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                              {% endfor %}
+                                                          {% else %}
+                                <p class="text-center text-sm text-gray-500 py-6">
+                                     هنوز هیچ کامنتی ثبت نشده. اولین نفر باشید!
+                                 </p>
+                            {% endif %}
+                            <!-- Load More -->
+                            <div class="swiper-slide">
+                              <div
+                                class="flex h-64 items-center justify-center"
+                              >
+                                <div
+                                  aria-controls="mobile-comments-drawer-navigation"
+                                  data-drawer-show="mobile-comments-drawer-navigation"
+                                  data-drawer-placement="bottom"
+                                  data-drawer-target="mobile-comments-drawer-navigation"
+                                  type="button"
+                                  class="flex flex-col items-center justify-center gap-y-4 text-primary"
+                                >
+                                  <div
+                                    class="rounded-full border border-emerald-500 p-2 dark:border-emerald-400"
+                                  >
+                                    <svg class="h-6 w-6">
+                                      <use xlink:href="#chevron-left" />
+                                    </svg>
+                                  </div>
+                                  <div>مشاهده بیشتر</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="hidden justify-center md:flex">
+                  <button class="btn-secondary-nobg" id="toggleCommentsButton">
+                    مشاهده بیشتر
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#chevron-left" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!-- Product Gallery modal -->
+      <div
+        id="product-gallery-modal"
+        tabindex="-1"
+        aria-hidden="true"
+        class="main-scroll fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0"
+      >
+        <div class="relative max-h-full w-full max-w-7xl">
+          <div
+            class="divide-y overflow-hidden rounded-lg bg-muted shadow ring-1 ring-gray-100 dark:ring-white/5"
+          >
+            <div class="px-4 py-5 sm:px-6">
+              <div class="flex items-center justify-between">
+                <h3 class="line-clamp-1 md:text-lg">
+                  تصاویر محصول {{ product.title }}
+                </h3>
+                <button
+                  class=" "
+                  data-modal-hide="product-gallery-modal"
+                  type="button"
+                >
+                  <svg class="h-5 w-5">
+                    <use xlink:href="#close" />
+                  </svg>
+
+                  <span class="sr-only">Close menu</span>
+                </button>
+              </div>
+            </div>
+            <div>
+              <div class="flex flex-col gap-4">
+                <div class="border-b p-6">
+                  <div class="swiper product-image-desktop-swiper">
+                    <div class="swiper-wrapper">
+                        {% for image in product.images.all %}
+                      <div class="swiper-slide">
+                        <img
+                          src="{{ image.image.url }}"
+                          alt=""
+                          class="mx-auto min-h-[500px] min-w-[500px]"
+                          loading="lazy"
+                        />
+                      </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next hidden md:flex"></div>
+                    <div class="swiper-button-prev hidden md:flex"></div>
+                  </div>
+                </div>
+                <div class="p-6">
+                  <div class="swiper product-image-desktop-2-swiper">
+                    <div class="swiper-wrapper justify-center">
+                      <div class="swiper-slide rounded-lg border">
+                        <img
+                          src="{{ product.image.url }}"
+                          alt=""
+                          class="mx-auto h-25 w-25"
+                          loading="lazy"
+                        />
+                      </div>
+                        {% for image in product.images.all %}
+                      <div class="swiper-slide rounded-lg border">
+                        <img
+                          src="{{ image.image.url }}"
+                          alt=""
+                          class="mx-auto h-25 w-25"
+                          loading="lazy"
+                        />
+                      </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-button-next hidden md:flex"></div>
+                    <div class="swiper-button-prev hidden md:flex"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile Comments modal -->
+      <div
+        aria-labelledby="mobile-comments-drawer-navigation-label"
+        class="fixed bottom-0 left-0 right-0 z-40 h-full w-full translate-y-full bg-muted transition-transform duration-300"
+        id="mobile-comments-drawer-navigation"
+        tabindex="-1"
+      >
+        <div
+          class="flex items-center justify-between gap-x-4 border-b p-4 pb-5"
+        >
+          <h5 class="text-lg text-text/90">دیدگاه ها</h5>
+          <button
+            aria-controls="mobile-comments-drawer-navigation"
+            class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-text/90 hover:bg-zinc-100 hover:text-gray-900 dark:hover:bg-black dark:hover:text-white"
+            data-drawer-hide="mobile-comments-drawer-navigation"
+            type="button"
+          >
+            <svg class="h-5 w-5">
+              <use xlink:href="#close" />
+            </svg>
+
+            <span class="sr-only">Close menu</span>
+          </button>
+        </div>
+
+        <div class="h-full overflow-y-auto p-4 pb-32">
+          <ul class="space-y-6">
+              {% if comments %}
+              {% for comment in comments %}
+            <li>
+              <div class="flex h-64 flex-col rounded-lg border px-4 py-6">
+                <!-- head -->
+                <div class="flex items-center justify-between mb-4">
+                    {% if comment.recommend %}
+                  <div class="flex items-center gap-x-2 text-primary">
+                    <svg class="h-5 w-5">
+                      <use xlink:href="#like" />
+                    </svg>
+                    پیشنهاد میکنم
+                  </div>
+                    {% else %}
+                    <div class="flex items-center gap-x-2 text-red-500 dark:text-red-400" >
+                        <svg class="h-5 w-5">
+                            <use xlink:href="#dislike" />
+                        </svg>
+                        پیشنهاد نمیکنم
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- Comment -->
+                <div class="flex-grow space-y-2">
+                  <h5 class="text-sm leading-relaxed">
+                    by : {{ comment.name }}
+                  </h5>
+                  <p class="line-clamp-4 text-sm leading-relaxed text-text/90">
+                        {{ comment.content }}
+                  </p>
+                </div>
+                <!-- Footer -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-x-2">
+                    <div class="text-xs text-text/60">{{ comment.created_at }}</div>
+                    <span
+                      class="h-3 w-px rounded-full bg-background dark:bg-muted/10"
+                    ></span>
+                      {% if user.is_staff %}
+                      <div class="text-xs text-text/60">ادمین</div>
+                      {% else %}
+                    <div class="text-xs text-text/60">خریدار</div>
+                      {% endif %}
+                  </div>
+                </div>
+              </div>
+            </li>
+                {% endfor %}
+                            {% else %}
+                                <p class="text-center text-sm text-gray-500 py-6">
+                                     هنوز هیچ کامنتی ثبت نشده. اولین نفر باشید!
+                                 </p>
+                            {% endif %}
+          </ul>
+        </div>
+      </div>
+      <!-- Mobile Spec modal -->
+      <div
+        aria-labelledby="mobile-spec-drawer-navigation-label"
+        class="fixed bottom-0 left-0 right-0 z-40 h-full w-full translate-y-full bg-muted transition-transform duration-300"
+        id="mobile-spec-drawer-navigation"
+        tabindex="-1"
+      >
+        <div
+          class="flex items-center justify-between gap-x-4 border-b p-4 pb-5"
+        >
+          <h5 class="text-lg text-text/90">مشخصات</h5>
+          <button
+            aria-controls="mobile-spec-drawer-navigation"
+            class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-text/90 hover:bg-zinc-100 hover:text-gray-900 dark:hover:bg-black dark:hover:text-white"
+            data-drawer-hide="mobile-spec-drawer-navigation"
+            type="button"
+          >
+            <svg class="h-5 w-5">
+              <use xlink:href="#close" />
+            </svg>
+
+            <span class="sr-only">Close menu</span>
+          </button>
+        </div>
+
+        <div class="h-full overflow-y-auto p-4 pb-32">
+          <ul class="space-y-6 text-sm">
+              {% for feature in product.features.all %}
+            <li class="grid grid-cols-3 gap-x-2 lg:grid-cols-5">
+              <div class="col-span-1 text-text/60">{{ feature.key }}</div>
+              <div class="col-span-2 border-b pb-4 text-text/90 lg:col-span-4">
+                <ul class="space-y-4">
+                  <li>{{ feature.value }}</li>
+                </ul>
+              </div>
+            </li>
+                {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <!-- Mobile Description modal -->
+      <div
+        aria-labelledby="mobile-description-drawer-navigation-label"
+        class="fixed bottom-0 left-0 right-0 z-40 h-full w-full translate-y-full bg-muted transition-transform duration-300"
+        id="mobile-description-drawer-navigation"
+        tabindex="-1"
+      >
+        <div
+          class="flex items-center justify-between gap-x-4 border-b p-4 pb-5"
+        >
+          <h5 class="text-lg text-text/90">معرفی</h5>
+          <button
+            aria-controls="mobile-description-drawer-navigation"
+            class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-text/90 hover:bg-zinc-100 hover:text-gray-900 dark:hover:bg-black dark:hover:text-white"
+            data-drawer-hide="mobile-description-drawer-navigation"
+            type="button"
+          >
+            <svg class="h-5 w-5">
+              <use xlink:href="#close" />
+            </svg>
+
+            <span class="sr-only">Close menu</span>
+          </button>
+        </div>
+
+        <div class="h-full overflow-y-auto p-4 pb-32">
+          <div
+            class="space-y-4 text-sm leading-loose text-text/90 lg:text-base"
+          >
+{{ product.description }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit answer to Comments modal -->
+
+
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const select = document.getElementById("account-capacity");
+
+    const oldBox = document.getElementById("old-price-box");
+    const oldPrice = document.getElementById("old-price");
+    const discountBadge = document.getElementById("discount-badge");
+    const finalPrice = document.getElementById("final-price");
+
+    function format(n) {
+        return Number(n).toLocaleString("fa-IR");
+    }
+
+    function update() {
+        const opt = select.selectedOptions[0];
+
+        const price = opt.dataset.price;       // قیمت اصلی
+        const discount = opt.dataset.discount; // "50%" یا "None"
+        const finalVal = opt.dataset.final;    // قیمت بعد تخفیف
+
+        // ✅ اگر تخفیف وجود دارد
+        if (discount && discount !== "None" && discount !== "") {
+
+            oldBox.style.display = "flex";               // نمایش بخش تخفیف
+            oldPrice.textContent = format(price);        // قیمت اصلی
+            discountBadge.textContent = discount;        // 50%
+            finalPrice.textContent = format(finalVal);   // قیمت بعد از تخفیف
+        }
+
+        // ✅ اگر تخفیف نداشت
+        else {
+            oldBox.style.display = "none";               // مخفی
+            finalPrice.textContent = format(price);      // قیمت اصلی
+        }
+    }
+
+    select.addEventListener("change", update);
+    update();  // اجرای اولیه صفحه
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const select = document.getElementById("desktop-capacity");
+    const oldBox = document.getElementById("desktop-old-box");
+    const oldPrice = document.getElementById("desktop-old-price");
+    const discountBox = document.getElementById("desktop-discount");
+    const finalPrice = document.getElementById("desktop-final-price");
+
+    function format(n) {
+        return Number(n).toLocaleString("fa-IR");
+    }
+
+    function update() {
+        const opt = select.selectedOptions[0];
+
+        const price = opt.dataset.price;
+        const discount = opt.dataset.discount; // "50%" یا "None"
+        const finalVal = opt.dataset.final;
+
+        if (discount && discount !== "None" && discount !== "") {
+            oldBox.style.display = "flex";
+            oldPrice.textContent = format(price);
+            discountBox.textContent = discount;
+            finalPrice.textContent = format(finalVal);
+        } else {
+            oldBox.style.display = "none";
+            finalPrice.textContent = format(price);
+        }
+    }
+
+    select.addEventListener("change", update);
+    update(); // بار اول
+});
+</script>
+    <script>
+      const copyToClipboardSocialShareDesktop = (button) => {
+        const linkToCopy = button.getAttribute("data-link");
+        if (linkToCopy) {
+          navigator.clipboard
+            .writeText(linkToCopy)
+            .then(function () {
+              const copyToClipboardSocialShareText = document.getElementById(
+                "copyToClipboardSocialShareText",
+              );
+              copyToClipboardSocialShareText.innerText = "کپی شد !";
+
+              // Revert the text after 5 seconds
+              setTimeout(function () {
+                copyToClipboardSocialShareText.innerText = "کپی کردن لینک";
+              }, 5000);
+            })
+            .catch(function (err) {
+              console.error("مشکلی در عملیات پیش آمد", err);
+            });
+        }
+      };
+      const copyToClipboardSocialShareMobile = (button) => {
+        const linkToCopy = button.getAttribute("data-link");
+        console.log(linkToCopy);
+        if (linkToCopy) {
+          navigator.clipboard
+            .writeText(linkToCopy)
+            .then(function () {
+              const copyToClipboardSocialShareNotifyMobile =
+                document.getElementById(
+                  "notify-copied-social-share-link-mobile",
+                );
+              copyToClipboardSocialShareNotifyMobile.classList.remove("hidden");
+
+              // Revert the text after 5 seconds
+              setTimeout(function () {
+                copyToClipboardSocialShareNotifyMobile.classList.add("hidden");
+              }, 5000);
+            })
+            .catch(function (err) {
+              console.error("مشکلی در عملیات پیش آمد", err);
+            });
+        }
+      };
+
+      // Define a function to handle the toggling of content and buttons
+      function toggleContent(container, button) {
+        if (container.offsetHeight !== 500) {
+          button.remove();
+        }
+
+        button.addEventListener("click", () => {
+          if (container.classList.contains("max-h-[500px]")) {
+            container.classList.remove("max-h-[500px]", "overflow-hidden");
+            button.innerHTML =
+              'بستن <svg class="w-5 h-5"><use xlink:href="#chevron-left"/></svg>';
+          } else {
+            container.classList.add("max-h-[500px]", "overflow-hidden");
+            button.innerHTML =
+              'مشاهده بیشتر <svg class="w-5 h-5"><use xlink:href="#chevron-left"/></svg>';
+          }
+        });
+      }
+
+      // Find and toggle the description content
+      const descriptionContainer = document.getElementById(
+        "descriptionContainer",
+      );
+      const toggleDescriptionButton = document.getElementById(
+        "toggleDescriptionButton",
+      );
+      const descriptionButtonMobile = document.getElementById(
+        "descriptionButtonMobile",
+      );
+      if (descriptionContainer.offsetHeight !== 500) {
+        descriptionButtonMobile.remove();
+      }
+      toggleContent(descriptionContainer, toggleDescriptionButton);
+
+      // Find and toggle the specs content
+      const specsContainer = document.getElementById("specsContainer");
+      const toggleSpecsButton = document.getElementById("toggleSpecsButton");
+      const specsButtonMobile = document.getElementById("specsButtonMobile");
+      if (specsContainer.offsetHeight !== 500) {
+        specsButtonMobile.remove();
+      }
+      toggleContent(specsContainer, toggleSpecsButton);
+
+      // Find and toggle the comments content
+      const commentsContainer = document.getElementById("commentsContainer");
+      const toggleCommentsButton = document.getElementById(
+        "toggleCommentsButton",
+      );
+      if (toggleCommentsButton && commentsContainer) {
+        // Check if content is taller than 500px, if not, hide the button
+        if (commentsContainer.scrollHeight <= 500) {
+          toggleCommentsButton.remove();
+        } else {
+          // Add max-height and overflow-hidden initially
+          commentsContainer.classList.add("max-h-[500px]", "overflow-hidden");
+          toggleContent(commentsContainer, toggleCommentsButton);
+        }
+      }
+    </script>
+{% endblock %}

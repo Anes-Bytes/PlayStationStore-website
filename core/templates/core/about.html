@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرشین گیمز|درباره ما</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="auth-container about-container">
+        <div class="auth-card about-card">
+            <div class="auth-header">
+                <h1>درباره پرشین گیمز 🎮</h1>
+                <p>داستان ما و ماموریت‌مان</p>
+            </div>
+
+            <div class="about-content">
+                <div class="about-section">
+                    <div class="about-icon">🎯</div>
+                    <h2 class="section-title">ماموریت ما</h2>
+                    <p class="about-text">
+                        پرشین گیمز با هدف ارائه بهترین تجربه خرید بازی‌های ویدیویی و محصولات دیجیتال برای کاربران ایرانی تأسیس شد. ما به دنبال ایجاد بستری امن، سریع و راحت برای تمامی گیمرهای عزیز کشورمان هستیم.
+                    </p>
+                </div>
+
+                <div class="about-section">
+                    <div class="about-icon">✨</div>
+                    <h2 class="section-title">چرا ما؟</h2>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <div class="feature-content">
+                                <h3>ارسال فوری</h3>
+                                <p>تحویل محصولات در سریع‌ترین زمان ممکن</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔒</span>
+                            <div class="feature-content">
+                                <h3>امنیت کامل</h3>
+                                <p>پرداخت امن با پشتیبانی از درگاه‌های معتبر</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💬</span>
+                            <div class="feature-content">
+                                <h3>پشتیبانی 24/7</h3>
+                                <p>تیم پشتیبانی همیشه در خدمت شماست</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🎁</span>
+                            <div class="feature-content">
+                                <h3>قیمت‌های مناسب</h3>
+                                <p>بهترین قیمت‌ها با تخفیف‌های ویژه</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-section">
+                    <div class="about-icon">🚀</div>
+                    <h2 class="section-title">تاریخچه</h2>
+                    <p class="about-text">
+                        پرشین گیمز در سال 1404 با تیمی جوان و پرانگیزه شروع به کار کرد. از ابتدا هدف ما این بود که یک فروشگاه آنلاین باکیفیت برای گیمرهای ایرانی بسازیم که هم قیمت‌های منصفانه داشته باشد و هم خدمات عالی ارائه دهد.
+                    </p>
+                    <p class="about-text">
+                        امروز افتخار می‌کنیم که به یکی از معتبرترین فروشگاه‌های بازی‌های دیجیتال در ایران تبدیل شده‌ایم و هزاران مشتری راضی داریم که به ما اعتماد کرده‌اند.
+                    </p>
+                </div>
+
+                <div class="about-section">
+                    <div class="about-icon">👥</div>
+                    <h2 class="section-title">تیم ما</h2>
+                    <p class="about-text">
+                        تیم پرشین گیمز متشکل از افراد با تجربه و علاقه‌مند به بازی‌های ویدیویی است. ما همیشه در تلاش هستیم تا خدمات خود را بهبود بخشیم و بهترین تجربه خرید را برای شما رقم بزنیم.
+                    </p>
+                </div>
+            </div>
+
+            <div class="about-footer">
+                <p>از همراهی شما ممنونیم! 🙏</p>
+                <br>
+                                <p> <a href="{% url 'home' %}">بازگشت</a></p>
+
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
+

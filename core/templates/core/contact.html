@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرشین گیمز|تماس با ما</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="auth-container contact-container">
+        <div class="auth-card contact-card">
+            <div class="auth-header">
+                <h1>تماس با ما 📞</h1>
+                <p>ما اینجاییم تا به شما کمک کنیم</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-intro">
+                    <p class="contact-text">
+                        اگر سوال، پیشنهاد یا مشکلی دارید، خوشحال می‌شویم از طریق راه‌های ارتباطی زیر با ما در تماس باشید. تیم پشتیبانی ما در تمامی ساعات شبانه‌روز آماده پاسخگویی به شماست.
+                    </p>
+                </div>
+
+                <div class="contact-methods">
+                    <a href="https://t.me/PersianGames_Shop" target="_blank" class="contact-method telegram-channel">
+                        <div class="contact-method-icon">📢</div>
+                        <div class="contact-method-content">
+                            <h3 class="contact-method-title">کانال تلگرام</h3>
+                            <p class="contact-method-desc">برای اطلاع از آخرین اخبار و تخفیف‌ها</p>
+                            <span class="contact-method-link">@PersianGames_Shop</span>
+                            <span class="contact-method-arrow">↗</span>
+                        </div>
+                    </a>
+
+                    <a href="https://t.me/PersianGames_Support" target="_blank" class="contact-method telegram-id">
+                        <div class="contact-method-icon">💬</div>
+                        <div class="contact-method-content">
+                            <h3 class="contact-method-title">پشتیبانی تلگرام</h3>
+                            <p class="contact-method-desc">برای ارتباط مستقیم با تیم پشتیبانی</p>
+                            <span class="contact-method-link">@PersianGames_Support</span>
+                            <span class="contact-method-arrow">↗</span>
+                        </div>
+                    </a>
+
+                    <a href="" target="_blank" class="contact-method instagram">
+                        <div class="contact-method-icon">📷</div>
+                        <div class="contact-method-content">
+                            <h3 class="contact-method-title">صفحه اینستاگرام</h3>
+                            <p class="contact-method-desc">برای دنبال کردن ما در اینستاگرام</p>
+                            <span class="contact-method-link">بزودی...</span>
+                            <span class="contact-method-arrow">↗</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="contact-info-box">
+                    <div class="info-box-icon">⏰</div>
+                    <div class="info-box-content">
+                        <h3>ساعات پاسخگویی</h3>
+                        <p>پشتیبانی 24 ساعته در 7 روز هفته</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-box">
+                    <div class="info-box-icon">⚡</div>
+                    <div class="info-box-content">
+                        <h3>زمان پاسخ</h3>
+                        <p>ما معمولاً در کمتر از یک ساعت پاسخ می‌دهیم</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-footer">
+                <p>منتظر پیام شما هستیم! 😊</p>
+                <br>
+                <p> <a href="{% url 'home' %}">بازگشت</a></p>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
+

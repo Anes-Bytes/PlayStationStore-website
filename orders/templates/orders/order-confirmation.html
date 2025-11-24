@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سفارش تأیید شد</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+        <section>
+{% if messages %}
+  <div class="messages-container fixed top-6 right-6 z-50 flex flex-col gap-4 max-w-sm">
+    {% for message in messages %}
+      <div
+        class="message rounded-xl px-6 py-4 shadow-lg text-base font-semibold flex items-center gap-4
+               {{ message.tags }}"
+        role="alert"
+      >
+        <span class="message-icon text-lg">
+          {% if 'success' in message.tags %}✔{% elif 'error' in message.tags %}✖{% elif 'warning' in message.tags %}⚠{% else %}ℹ{% endif %}
+        </span>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+</section>
+    <div class="auth-container confirmation-container">
+        <div class="auth-card confirmation-card">
+            <div class="confirmation-icon">
+                <div class="success-circle">
+                    <span>✓</span>
+                </div>
+            </div>
+
+            <div class="auth-header">
+                <h1>سفارش شما با موفقیت ثبت شد! 🎉</h1>
+                <p>سفارش شما در حال پردازش است</p>
+            </div>
+
+            <div class="confirmation-details">
+                <div class="detail-box">
+                    <div class="detail-icon">🆔</div>
+                    <div class="detail-content">
+                        <span class="detail-label">شماره سفارش:</span>
+                        <span class="detail-value order-id-confirm" id="orderIdConfirm">#ORD-123456789</span>
+                    </div>
+                </div>
+
+                <div class="detail-box telegram-box">
+                    <div class="detail-icon">💬</div>
+                    <div class="detail-content">
+                        <span class="detail-label">پشتیبانی تلگرام:</span>
+                        <a href="https://t.me/PersianGamesSupport" target="_blank" class="telegram-link" id="telegramLink">
+                            <span>@PersianGamesSupport</span>
+                            <span class="link-icon">↗</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirmation-message">
+                <div class="message-box">
+                    <div class="message-icon">📸</div>
+                    <div class="message-text">
+                        <p><strong>لطفاً اسکرین‌شات این رسید را برای پشتیبانی بفرستید</strong></p>
+                        <p class="message-subtext">تیم پرشین گیم در سریع‌ترین زمان ممکن پاسخگوی شما خواهند بود</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="confirmation-actions">
+                <button type="button" class="btn btn-secondary"
+                        onclick="location.href='{% url 'order-detail' order.id %}'">
+                    <span>مشاهده سفارش</span>
+                </button>
+
+                <a href="https://t.me/PersianGamesSupport" target="_blank" class="btn btn-primary">
+                    <span>ارسال به تلگرام</span>
+                    <span class="btn-icon">→</span>
+                </a>
+            </div>
+
+            <div class="confirmation-footer">
+                <p>ممنون از خرید شما! 🙏</p>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Load order ID from URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+
+            if (orderId) {
+                document.getElementById('orderIdConfirm').textContent = `#ORD-${orderId}`;
+            } else {
+                // Generate random order ID if not provided
+                const randomId = Math.floor(Math.random() * 1000000000);
+                document.getElementById('orderIdConfirm').textContent = `#ORD-${randomId}`;
+            }
+
+            // Add animation on load
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+

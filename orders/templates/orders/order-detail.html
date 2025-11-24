@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جزئیات سفارش</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+        <section>
+{% if messages %}
+  <div class="messages-container fixed top-6 right-6 z-50 flex flex-col gap-4 max-w-sm">
+    {% for message in messages %}
+      <div
+        class="message rounded-xl px-6 py-4 shadow-lg text-base font-semibold flex items-center gap-4
+               {{ message.tags }}"
+        role="alert"
+      >
+        <span class="message-icon text-lg">
+          {% if 'success' in message.tags %}✔{% elif 'error' in message.tags %}✖{% elif 'warning' in message.tags %}⚠{% else %}ℹ{% endif %}
+        </span>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+</section>
+    <div class="auth-container order-container">
+        <div class="auth-card order-card">
+            <div class="auth-header">
+                <h1>جزئیات سفارش 📦</h1>
+                <p>شماره سفارش: <span class="order-id" id="orderId">#ORD-{{ order.id }}</span></p>
+            </div>
+
+            <div class="order-section">
+                <h2 class="section-title">محصولات سفارش</h2>
+                <div class="products-list" id="productsList">
+                    {% for item in order.items.all %}
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-name">{{ item.product.title }}</span>
+                            <span class="product-quantity">{{ item.quantity }} × {{ item.capacity.price|floatformat|intcomma }} تومان</span>
+                        </div>
+                        <span class="product-total">{{ item.final_price|floatformat|intcomma }} تومان</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="order-summary">
+                <div class="summary-row">
+                    <span class="summary-label">مجموع محصولات:</span>
+                    <span class="summary-value" id="subtotal">{{ order.org_price|floatformat|intcomma }} تومان</span>
+                </div>
+                <div class="summary-row discount">
+                    <span class="summary-label">سود از خرید:</span>
+                    <span class="summary-value" id="discount">{{ order.total_discount|floatformat|intcomma }} تومان</span>
+                </div>
+                <div class="summary-row total">
+                    <span class="summary-label">مبلغ نهایی:</span>
+                    <span class="summary-value" id="finalAmount">{{ order.final_price|floatformat|intcomma }} تومان</span>
+                </div>
+            </div>
+
+            <div class="payment-method-section">
+                <h2 class="section-title">روش پرداخت</h2>
+                <div class="payment-options">
+                    <label class="payment-option selected">
+                        <input type="radio" name="paymentMethod" value="zarinpal" checked>
+                        <div class="payment-option-content">
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-info">
+                                <span class="payment-name">زرین‌پال</span>
+                                <span class="payment-desc">پرداخت امن و سریع</span>
+                            </div>
+                            <div class="radio-check"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+{% if order.status == "W" %}
+
+    <div class="order-actions">
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            <span>بازگشت</span>
+        </a>
+
+        <a href="{% url 'order-failed' order.id %}" class="btn btn-primary">
+            <span>پرداخت و ادامه</span>
+            <span class="btn-icon">→</span>
+        </a>
+    </div>
+
+{% elif order.status == "C" %}
+
+    <div class="order-actions">
+        <button class="btn w-100"
+                style="background:#ef4444; color:white; border-radius:12px; padding:12px; border:none;"
+                disabled>
+            سفارش کنسل شده
+        </button>
+    </div>
+
+{% else %}
+
+    <div class="order-actions">
+        <button class="btn w-100"
+                style="background:#22c55e; color:white; border-radius:12px; padding:12px; border:none;"
+                disabled>
+            پرداخت شده
+        </button>
+    </div>
+
+{% endif %}
+
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        // Show message function (should be in main script.js)
+        function showMessage(text, type = 'info') {
+            const messagesContainer = document.getElementById('messagesContainer');
+            if (!messagesContainer) return;
+
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+
+            message.innerHTML = `
+                <span>${icons[type] || icons.info}</span>
+                <span>${text}</span>
+            `;
+
+            messagesContainer.appendChild(message);
+
+            setTimeout(() => {
+                message.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        // Payment method selection
+        document.querySelectorAll('.payment-option input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.payment-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                this.closest('.payment-option').classList.add('selected');
+            });
+        });
+
+        // Proceed to payment
+        function proceedToPayment() {
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = true;
+            payButton.innerHTML = '<span>در حال پردازش...</span>';
+
+            // Get order ID from URL or use default
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id') || document.getElementById('orderId').textContent;
+
+            // Simulate payment processing
+            setTimeout(() => {
+                // Navigate to confirmation page
+                window.location.href = `order-confirmation.html?id=${orderId.replace('#', '')}`;
+            }, 1500);
+        }
+
+        // Load order data from URL params or localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+
+            if (orderId) {
+                document.getElementById('orderId').textContent = `#ORD-${orderId}`;
+            }
+
+            // You can load order details from localStorage or API here
+            // const orderData = JSON.parse(localStorage.getItem('currentOrder'));
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,84 @@
+# ==================================
+# Django & Python Ignore
+# ==================================
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite3
+db.sqlite3
+
+
+# Local settings
+settings_local.py
+local_settings.py
+
+media/
+
+staticfiles/
+static/
+
+# Backup files
+*.bak
+*.swp
+
+# Environment variables
+#.env
+#*.env
+#.env.*
+
+# Compiled files
+*.mo
+
+# ==================================
+# Editor Ignore
+# ==================================
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# JetBrains
+*.iml
+
+# ==================================
+# Cache
+# ==================================
+.pytest_cache/
+.cache/
+*.pid
+
+# ==================================
+# Ignore compressed files
+# ==================================
+*.zip
+*.tar.gz
+*.rar
+
+# ==================================
+# OS Files
+# ==================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db

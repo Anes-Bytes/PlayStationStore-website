@@ -1,0 +1,600 @@
+{% extends '_base.html' %}
+{% load humanize %}
+{% block page_title %} محصولات|پرشین گیم {% endblock %}
+
+
+{% block page_content %}
+
+
+      <main class="flex-grow bg-background pb-14 pt-36 xs:pt-36">
+        <div class="container relative">
+          <!-- Mobile Options Section -->
+          <div class="mb-6 flex items-center justify-center gap-x-4 md:hidden">
+            <!-- Filter -->
+            <button
+              aria-controls="shop-filter-drawer-navigation"
+              class="flex w-full items-center gap-x-4 rounded-lg bg-muted px-4 py-3 text-sm xs:text-base"
+              data-drawer-show="shop-filter-drawer-navigation"
+              data-drawer-placement="bottom"
+              data-drawer-target="shop-filter-drawer-navigation"
+              type="button"
+            >
+              <svg class="h-6 w-6">
+                <use xlink:href="#filter" />
+              </svg>
+              <div>فیلتر</div>
+            </button>
+            <!-- Sort -->
+            <button
+              aria-controls="shop-sort-drawer-navigation"
+              class="flex w-full items-center gap-x-4 rounded-lg bg-muted px-4 py-3 text-sm xs:text-base"
+              data-drawer-show="shop-sort-drawer-navigation"
+              data-drawer-placement="bottom"
+              data-drawer-target="shop-sort-drawer-navigation"
+              type="button"
+            >
+              <svg class="h-6 w-6">
+                <use xlink:href="#sort" />
+              </svg>
+              <div>مرتب سازی</div>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-12 grid-rows-[60px_min(500px,_1fr)] gap-4">
+            <!-- Desktop Filter Section -->
+            <div class="col-span-4 row-span-2 hidden md:block lg:col-span-3">
+              <div
+                class="sticky top-32 mb-4 overflow-hidden rounded-lg bg-muted shadow-base"
+              >
+                <div
+                  dir="ltr"
+                  class="flex max-h-[calc(95vh_-_100px)] flex-col overflow-y-auto overflow-x-hidden px-4 py-3"
+                >
+<div dir="rtl" class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow space-y-6">
+  <form id="filterForm" class="space-y-6">
+
+    <!-- Title -->
+    <div class="mb-4 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">فیلترها</h3>
+      <button type="button" id="resetFilters" class="text-sm text-red-500 hover:underline">
+        حذف همه
+      </button>
+    </div>
+
+    <!-- Price -->
+    <div class="space-y-2">
+      <p class="font-medium text-gray-700 dark:text-gray-300">محدوده قیمت (تومان)</p>
+      <div class="flex items-center gap-2">
+        <input
+          type="number"
+          name="min_price"
+          value="{{ request.GET.min_price }}"
+          placeholder="از"
+          class="w-full rounded-xl border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+        />
+        <span class="text-gray-700 dark:text-gray-300">-</span>
+        <input
+          type="number"
+          name="max_price"
+          value="{{ request.GET.max_price }}"
+          placeholder="تا"
+          class="w-full rounded-xl border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="space-y-2">
+      <label for="categorySelect" class="font-medium text-gray-700 dark:text-gray-300">دسته‌بندی</label>
+      <select
+        id="categorySelect"
+        name="category_slug"
+        class="w-full rounded-xl border bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+      >
+        {% if request.GET.category_slug %}
+        <option value="">{{ request.GET.category_slug }}</option>
+        {% else %}
+        <option value="">انتخاب دسته بندی</option>
+        {% endif %}
+        {% for category in categories %}
+        <option value="{{ category.slug }}">{{ category.name|truncatewords:5 }}</option>
+        {% empty %}
+        <option value="">دسته بندی‌ای یافت نشد</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Toggles -->
+    <div class="space-y-3">
+      <label class="flex items-center justify-between cursor-pointer text-gray-700 dark:text-gray-300">
+        <span>فقط کالاهای موجود</span>
+        {% if request.GET.available %}
+        <input type="checkbox" name="available" class="h-4 w-4" checked />
+        {% else %}
+        <input type="checkbox" name="available" class="h-4 w-4" />
+        {% endif %}
+      </label>
+
+      <label class="flex items-center justify-between cursor-pointer text-gray-700 dark:text-gray-300">
+        <span>فقط محصولات ویژه</span>
+        {% if request.GET.special %}
+        <input type="checkbox" name="special" class="h-4 w-4" checked />
+        {% else %}
+        <input type="checkbox" name="special" class="h-4 w-4" />
+        {% endif %}
+      </label>
+    </div>
+
+    <!-- Submit -->
+    <div class="pt-2">
+      <button
+        type="submit"
+        class="w-full rounded-xl bg-primary px-4 py-2 text-white hover:bg-primary/90 transition"
+      >
+        اعمال فیلتر
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.getElementById("resetFilters").addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = window.location.pathname;
+  });
+</script>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-span-12 space-y-4 md:col-span-8 lg:col-span-9">
+              <!-- Desktop Sort Section -->
+<div class="hidden md:block">
+    <div
+      class="flex h-14 items-center gap-x-2 rounded-lg bg-muted px-2 text-text/90 shadow-base lg:px-4"
+    >
+      <!-- Title -->
+      <div class="flex items-center gap-x-2 text-sm lg:text-base">
+        <svg class="h-6 w-6">
+          <use xlink:href="#sort" />
+        </svg>
+        <p>مرتب سازی بر اساس</p>
+      </div>
+
+      <!-- Sort Buttons -->
+      <a href="{{ request.path }}"
+         class="ml-auto rounded-lg px-3 py-2 text-sm bg-background hover:bg-background/70">
+        مشاهده همه
+      </a>
+
+      <!-- جدیدترین -->
+      <a href="?sort_query=newest"
+         class="rounded-lg px-2 py-2 text-sm lg:px-4
+         {% if request.GET.sort_query == 'newest' %} bg-primary text-white {% endif %}">
+        جدیدترین
+      </a>
+
+      <!-- پرفروش‌ترین -->
+      <a href="?sort_query=best-sell"
+         class="rounded-lg px-2 py-2 text-sm lg:px-4
+         {% if request.GET.sort_query == 'best-sell' %} bg-primary text-white {% endif %}">
+        پرفروش‌ترین
+      </a>
+     <!-- محصولات ویژه -->
+      <a href="?sort_query=discounted"
+         class="rounded-lg px-2 py-2 text-sm lg:px-4
+         {% if request.GET.sort_query == 'discounted' %} bg-primary text-white {% endif %}">
+        محصولات ویژه
+      </a>
+      <!-- گران‌ترین -->
+      <a href="?sort_query=most-expensive"
+         class="rounded-lg px-2 py-2 text-sm lg:px-4
+         {% if request.GET.sort_query == 'most-expensive' %} bg-primary text-white {% endif %}">
+        گران‌ترین
+      </a>
+
+      <!-- ارزان‌ترین -->
+      <a href="?sort_query=cheapest"
+         class="rounded-lg px-2 py-2 text-sm lg:px-4
+         {% if request.GET.sort_query == 'cheapest' %} bg-primary text-white {% endif %}">
+        ارزان‌ترین
+      </a>
+
+
+
+    </div>
+</div>
+
+              <!-- Products Grid -->
+<div
+  class="grid grid-cols-2 gap-px gap-y-2 xs:gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+>
+  {% if page_obj %}
+    {% for product in page_obj %}
+      <div
+        class="border-gradient group relative rounded-base p-px before:absolute before:-inset-px before:h-[calc(100%+2px)] before:w-[calc(100%+2px)] before:rounded-base"
+      >
+        <div class="relative rounded-xl bg-muted p-2 shadow-base md:p-5 h-full flex flex-col">
+
+          <!-- تصویر با ارتفاع ثابت -->
+          <div class="mb-2 md:mb-5 h-40 flex items-center justify-center overflow-hidden">
+            <a href="{{ product.get_absolute_url }}">
+              <img
+                alt=""
+                class="object-contain h-full"
+                src="{{ product.image.url }}"
+              />
+            </a>
+          </div>
+
+          <!-- عنوان -->
+          <div class="mb-1 min-h-[48px] md:min-h-[56px]">
+            <a class="line-clamp-2 text-sm md:text-base" href="{{ product.get_absolute_url }}">
+              {{ product.title }}
+            </a>
+          </div>
+
+          <!-- قیمت‌ها - ارتفاع ثابت -->
+          <div class="mt-auto min-h-[60px] flex flex-col justify-end">
+
+            {% if product.discount %}
+              <div class="flex flex-col">
+                <div class="h-5 text-left">
+                  <del class="text-sm text-text/60 decoration-warning md:text-base">
+                    {{ product.price|intcomma }}
+                  </del>
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <p class="w-9 rounded-full bg-warning py-px text-center text-sm text-white">
+                    {{ product.discount.value|intcomma }}%
+                  </p>
+
+                  <div class="text-sm font-bold text-primary md:text-base">
+                    {{ product.get_final_price|floatformat:0|intcomma }}
+                    <span class="text-xs font-light md:text-sm">تومان</span>
+                  </div>
+                </div>
+              </div>
+
+            {% else %}
+              <!-- بدون تخفیف هم ارتفاع را حفظ می‌کنیم -->
+              <div class="flex flex-col justify-end h-full">
+                <div class="h-5"></div> <!-- فضا برای جای قیمت خط‌خورده -->
+                <div class="flex items-center justify-end">
+                  <div class="text-sm font-bold text-primary md:text-base">
+                    {{ product.get_final_price|floatformat:0|intcomma }}
+                    <span class="text-xs font-light md:text-sm">تومان</span>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
+
+        </div>
+      </div>
+    {% endfor %}
+
+  {% else %}
+    <div class="py-20 text-center">
+      <p class="mb-6 text-lg font-medium text-text/70">
+        محصولی یافت نشد
+      </p>
+
+      <a href="{{ request.path }}"
+         class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary/80">
+        بازگشت
+      </a>
+    </div>
+  {% endif %}
+</div>
+                {% if page_obj %}
+<!-- Pagination -->
+<div class="flex items-center justify-center gap-x-4 md:justify-end">
+
+  <!-- Previous page -->
+  {% if page_obj.has_previous %}
+  <a
+    href="?page={{ page_obj.previous_page_number }}"
+    class="pagination-button flex items-center justify-center"
+  >
+    <svg class="h-6 w-6">
+      <use xlink:href="#chevron-right"></use>
+    </svg>
+  </a>
+  {% else %}
+  <span class="pagination-button opacity-40 cursor-not-allowed flex items-center justify-center">
+    <svg class="h-6 w-6">
+      <use xlink:href="#chevron-right"></use>
+    </svg>
+  </span>
+  {% endif %}
+
+  <!-- Pages -->
+  <div class="flex items-center gap-x-2">
+
+    {% if page_obj.number > 2 %}
+      <a class="pagination-button" href="?page=1">1</a>
+      <p class="text-sm text-text/60">...</p>
+    {% endif %}
+
+    {% if page_obj.number > 1 %}
+      <a class="pagination-button" href="?page={{ page_obj.previous_page_number }}">
+        {{ page_obj.previous_page_number }}
+      </a>
+    {% endif %}
+
+    <a class="pagination-button pagination-button-active">
+      {{ page_obj.number }}
+    </a>
+
+    {% if page_obj.number < page_obj.paginator.num_pages %}
+      <a class="pagination-button" href="?page={{ page_obj.next_page_number }}">
+        {{ page_obj.next_page_number }}
+      </a>
+    {% endif %}
+
+    {% if page_obj.number < page_obj.paginator.num_pages|add:"-1" %}
+      <p class="text-sm text-text/60">...</p>
+      <a class="pagination-button" href="?page={{ page_obj.paginator.num_pages }}">
+        {{ page_obj.paginator.num_pages }}
+      </a>
+    {% endif %}
+
+  </div>
+
+  <!-- Next page -->
+  {% if page_obj.has_next %}
+  <a
+    href="?page={{ page_obj.next_page_number }}"
+    class="flex h-8 w-8 items-center justify-center rounded-full bg-muted transition-all duration-200 hover:bg-primary hover:text-white hover:dark:bg-emerald-600"
+  >
+    <svg class="h-6 w-6">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
+  </a>
+  {% else %}
+  <span class="flex h-8 w-8 items-center justify-center rounded-full bg-muted opacity-40 cursor-not-allowed">
+    <svg class="h-6 w-6">
+      <use xlink:href="#chevron-left"></use>
+    </svg>
+  </span>
+  {% endif %}
+
+</div>
+{% endif %}
+            </div>
+          </div>
+        </div>
+      </main>
+
+<div aria-labelledby="shop-sort-drawer-navigation-label"
+     class="fixed bottom-0 left-0 right-0 z-40 h-auto w-full translate-y-full rounded-t-3xl bg-muted transition-transform duration-300"
+     id="shop-sort-drawer-navigation"
+     tabindex="-1">
+
+  <div class="flex items-center justify-between gap-x-4 border-b p-4 pb-5">
+    <h5 class="text-lg text-text/90">مرتب سازی بر اساس</h5>
+    <button aria-controls="user-account-drawer-navigation"
+            class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-text/90 hover:bg-zinc-100 hover:text-gray-900 dark:hover:bg-black dark:hover:text-white"
+            data-drawer-hide="shop-sort-drawer-navigation"
+            type="button">
+      <svg class="h-5 w-5">
+        <use xlink:href="#close" />
+      </svg>
+      <span class="sr-only">Close menu</span>
+    </button>
+  </div>
+
+<form method="get" class="main-scroll h-full space-y-2 divide-y overflow-y-auto p-4">
+  <fieldset class="flex flex-col space-y-2">
+    <legend class="sr-only">Sort</legend>
+
+    <!-- مشاهده همه -->
+    <div>
+      <input class="peer hidden"
+             id="sort-all"
+             name="sort_query"
+             type="radio"
+             value=""
+             {% if not request.GET.sort_query %}checked{% endif %}>
+      <label for="sort-all"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">مشاهده همه</p>
+      </label>
+    </div>
+
+    <!-- جدیدترین -->
+    <div>
+      <input class="peer hidden"
+             id="sort-new"
+             name="sort_query"
+             type="radio"
+             value="newest"
+             {% if request.GET.sort_query == 'newest' %}checked{% endif %}>
+      <label for="sort-new"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">جدید ترین</p>
+      </label>
+    </div>
+
+    <!-- پرفروش ترین -->
+    <div>
+      <input class="peer hidden"
+             id="sort-sale"
+             name="sort_query"
+             type="radio"
+             value="best_sell"
+             {% if request.GET.sort_query == 'best_sell' %}checked{% endif %}>
+      <label for="sort-sale"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">پرفروش ترین</p>
+      </label>
+    </div>
+
+    <!-- محصولات ویژه -->
+    <div>
+      <input class="peer hidden"
+             id="sort-dis"
+             name="sort_query"
+             type="radio"
+             value="discounted"
+             {% if request.GET.sort_query == 'discounted' %}checked{% endif %}>
+      <label for="sort-dis"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">محصولات ویژه</p>
+      </label>
+    </div>
+
+    <!-- گران ترین -->
+    <div>
+      <input class="peer hidden"
+             id="sort-expensive"
+             name="sort_query"
+             type="radio"
+             value="more_expensive"
+             {% if request.GET.sort_query == 'more_expensive' %}checked{% endif %}>
+      <label for="sort-expensive"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">گران ترین</p>
+      </label>
+    </div>
+
+    <!-- ارزان ترین -->
+    <div>
+      <input class="peer hidden"
+             id="sort-chip"
+             name="sort_query"
+             type="radio"
+             value="cheapest"
+             {% if request.GET.sort_query == 'cheapest' %}checked{% endif %}>
+      <label for="sort-chip"
+             class="relative block w-full cursor-pointer rounded-lg border p-4 shadow-base
+             peer-checked:border-emerald-500 peer-checked:dark:border-emerald-400">
+        <p class="text-center text-text/90">ارزان ترین</p>
+      </label>
+    </div>
+
+  </fieldset>
+
+  <button type="submit"
+          class="mt-4 w-full rounded-lg bg-primary py-3 text-white">
+    اعمال مرتب‌سازی
+  </button>
+
+</form>
+</div>
+<!-- نسخه موبایل اصلاح‌شده بر اساس ساختار فرم دسکتاپ -->
+<!-- فقط فیلدهای مشابه دسکتاپ نگه داشته شده و پارامترها هماهنگ شده‌اند -->
+
+<form id="mobileFilterForm" class="w-full h-full flex flex-col" method="GET">
+  <div
+    aria-labelledby="shop-filter-drawer-navigation-label"
+    class="fixed bottom-0 left-0 right-0 z-40 h-full w-full translate-y-full bg-muted transition-transform duration-300"
+    id="shop-filter-drawer-navigation"
+    tabindex="-1"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between gap-x-4 border-b p-4 pb-5">
+      <h5 class="text-lg text-text/90">فیلتر محصولات</h5>
+      <button
+        aria-controls="shop-filter-drawer-navigation"
+        class="inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-text/90 hover:bg-zinc-100 hover:text-gray-900 dark:hover:bg-black dark:hover:text-white"
+        data-drawer-hide="shop-filter-drawer-navigation"
+        type="button"
+      >
+        <svg class="h-5 w-5"><use xlink:href="#close"/></svg>
+        <span class="sr-only">Close menu</span>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="h-full pb-[150px] overflow-y-auto p-4 space-y-6">
+
+      <!-- Price (مثل دسکتاپ → ورودی مستقیم min/max) -->
+      <div class="space-y-2">
+        <p class="font-medium">محدوده قیمت (تومان)</p>
+        <div class="flex items-center gap-2">
+          <input
+            type="number"
+            name="min_price"
+            value="{{ request.GET.min_price }}"
+            placeholder="از"
+            class="w-full rounded-xl border bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+          />
+          <span>-</span>
+          <input
+            type="number"
+            name="max_price"
+            value="{{ request.GET.max_price }}"
+            placeholder="تا"
+            class="w-full rounded-xl border bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+
+      <!-- Categories → مثل دسکتاپ با for -->
+      <div class="space-y-2">
+        <label for="categoryMobile" class="font-medium">دسته‌بندی</label>
+        <select
+          id="categoryMobile"
+          name="category_slug"
+          class="w-full rounded-xl border bg-gray-50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+        >
+          {% if request.GET.category_slug %}
+          <option value="">{{ request.GET.category_slug }}</option>
+          {% else %}
+          <option value="">انتخاب دسته بندی</option>
+          {% endif %}
+
+          {% for category in categories %}
+          <option value="{{ category.slug }}">{{ category.name|truncatewords:5 }}</option>
+          {% empty %}
+          <option value="">دسته بندی‌ای یافت نشد</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Available -->
+      <label class="flex items-center justify-between cursor-pointer">
+        <span>فقط کالاهای موجود</span>
+        {% if request.GET.available %}
+        <input type="checkbox" name="available" class="h-4 w-4" checked />
+        {% else %}
+        <input type="checkbox" name="available" class="h-4 w-4" />
+        {% endif %}
+      </label>
+
+      <!-- Special -->
+      <label class="flex items-center justify-between cursor-pointer">
+        <span>فقط محصولات ویژه</span>
+        {% if request.GET.special %}
+        <input type="checkbox" name="special" class="h-4 w-4" checked />
+        {% else %}
+        <input type="checkbox" name="special" class="h-4 w-4" />
+        {% endif %}
+      </label>
+    </div>
+
+    <!-- Footer -->
+    <div class="sticky bottom-0 left-0 right-0 flex items-center justify-between border-t bg-muted p-4 px-6 py-4">
+      <button class="btn-primary w-full py-3 text-sm" type="submit">اعمال فیلتر</button>
+    </div>
+  </div>
+</form>
+
+<script>
+  document.getElementById("resetMobileFilters")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = window.location.pathname;
+  });
+</script>
+
+{% endblock %}

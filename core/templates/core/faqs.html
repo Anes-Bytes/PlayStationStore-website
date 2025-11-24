@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرشین گیمز|سوالات متداول</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="auth-container faq-container">
+        <div class="auth-card faq-card">
+            <div class="auth-header">
+                <h1>سوالات متداول ❓</h1>
+                <p>پاسخ به سوالات پرتکرار شما</p>
+            </div>
+
+            <div class="faq-list" id="faqList">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">چگونه می‌توانم بازی‌ها را خریداری کنم؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>برای خرید بازی، ابتدا وارد حساب کاربری خود شوید، سپس بازی مورد نظر را به سبد خرید اضافه کنید و پس از تکمیل اطلاعات، پرداخت را انجام دهید. کد بازی بلافاصله پس از پرداخت موفق برای شما ارسال می‌شود.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">محصول چگونه برای من ارسال می‌شود؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>چنانچه محصول فیزیکی خریداری کرده باشید هنگام سفارش آدرستون ازط شما گرفته شده و در سریع ترین زمان ممکن محصول برای شما ارسال میشود و اگر محصول مجازی بوده طبق مراحلی که بعد از پرداخت در رسید دریافتی نشوته شده پیش برید تا تیم پرشین گیم سفارشتون رو تخویل دهند.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">آیا می‌توانم سفارش را کنسل کنم؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>بله اما بازگشت وجه فقط در صورتی قابل انجام است که سفارش به شما تحویل/ارسال نشده باشد.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">روش‌های پرداخت شما چیست؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>ما از درگاه پرداخت امن زرین‌پال استفاده می‌کنیم که از تمامی کارت‌های بانکی عضو شتاب پشتیبانی می‌کند. همچنین می‌توانید از روش‌های پرداخت دیجیتال دیگر نیز استفاده کنید.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">اگر محصول مشکل داشت چه کنم؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>اول از همه خدمتتون عرض کنم تیم پرشین گیم تمامی محصولات را تست شده و سالم تحویل مشتری میدهد. چنانچه محصول دریافتی مشکلی داشت میتوانید از تلگرام به پشتیبانی مجموعه پیام دهید</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">چقدر طول میکشه محصول به دستم برسه؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>تیم پرشین گیمز در سریع ترین زمان ممکن سفارش شما را انحام میدهند.(محصولات مجازی بسته به مشکلات اینترنت کشور تا حداکثر 72 ساعت تحویل میگردد.) </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">چگونه از تخفیف‌ها باخبر شوم؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>برای اطلاع از آخرین تخفیف‌ها و پیشنهادهای ویژه، می‌توانید به کانال تلگرام و پیج اینستاگرام ما بپیوندید. همچنین در صورت عضویت در سایت، اطلاعیه‌های ویژه برای شما ارسال می‌شود.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span class="faq-question-text">آیا بازی‌های شما اورجینال هستند؟</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>بله، تمامی بازی‌های موجود در فروشگاه ما کاملاً اورجینال و دارای گارانتی هستند. ما با تأمین‌کنندگان معتبر همکاری می‌کنیم و تمامی محصولات به صورت رسمی و قانونی ارائه می‌شوند.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-footer">
+                <p>سوال دیگری دارید؟ با ما تماس بگیرید! 💬</p>
+                <br>
+                                <p> <a href="{% url 'home' %}">بازگشت</a></p>
+                <a href="{% url 'contact' %}" class="btn btn-primary" style="margin-top: 1rem; text-decoration: none; display: inline-flex; width: auto; padding: 0.875rem 2rem;">
+                    <span>تماس با ما</span>
+                    <span class="btn-icon">→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const faqAnswer = faqItem.querySelector('.faq-answer');
+            const faqIcon = element.querySelector('.faq-icon');
+
+            const isOpen = faqItem.classList.contains('active');
+
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+                answer.style.maxHeight = null;
+                icon.textContent = '+';
+            });
+
+            // Open clicked item if it wasn't open
+            if (!isOpen) {
+                faqItem.classList.add('active');
+                faqAnswer.style.maxHeight = faqAnswer.scrollHeight + 'px';
+                faqIcon.textContent = '−';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
+

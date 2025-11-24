@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرشین گیمز|ثبت‌نام</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+        <section>
+{% if messages %}
+  <div class="messages-container fixed top-6 right-6 z-50 flex flex-col gap-4 max-w-sm">
+    {% for message in messages %}
+      <div
+        class="message rounded-xl px-6 py-4 shadow-lg text-base font-semibold flex items-center gap-4
+               {{ message.tags }}"
+        role="alert"
+      >
+        <span class="message-icon text-lg">
+          {% if 'success' in message.tags %}✔{% elif 'error' in message.tags %}✖{% elif 'warning' in message.tags %}⚠{% else %}ℹ{% endif %}
+        </span>
+        <span>{{ message }}</span>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+</section>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>حساب کاربری بسازید ✨</h1>
+                <p>لطفاً اطلاعات خود را وارد کنید</p>
+            </div>
+
+            <form action="{% url 'request_otp' %}" method="post" class="auth-form" >
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <div class="form-group">
+                    <label for="fullname">نام و نام خانوادگی</label>
+                    <input type="text" id="fullname" name="full_name" placeholder="امیر صلاحی" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">شماره تلفن</label>
+                    <input type="tel" id="phone" name="phone" placeholder="09123456789" required autocomplete="tel" pattern="09[0-9]{9}" maxlength="11">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>ارسال کد تأیید</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>از قبل حساب کاربری دارید؟ <a href="{% url 'login' %}">وارد شوید</a></p>
+                <br>
+                                <p> <a href="{% url 'home' %}">بازگشت</a></p>
+            </div>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'scripts/script.js' %}"></script>
+</body>
+</html>
+

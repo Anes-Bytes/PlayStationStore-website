@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پرشین گیمز|پروفایل کاربری</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+        <section>
+        {% if messages %}
+          <div class="messages-container fixed top-6 right-6 z-50 flex flex-col gap-4 max-w-sm">
+            {% for message in messages %}
+              <div
+                class="message rounded-xl px-6 py-4 shadow-lg text-base font-semibold flex items-center gap-4
+                       {{ message.tags }}"
+                role="alert"
+              >
+                <span class="message-icon text-lg">
+                  {% if 'success' in message.tags %}✔{% elif 'error' in message.tags %}✖{% elif 'warning' in message.tags %}⚠{% else %}ℹ{% endif %}
+                </span>
+                <span>{{ message }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        </section>
+    <div class="auth-container profile-container">
+        <div class="auth-card profile-card">
+            <div class="auth-header">
+                <h1>پروفایل کاربری 👤</h1>
+                <p>اطلاعات حساب کاربری و سفارشات شما</p>
+            </div>
+
+            <!-- User Details Section -->
+            <div class="profile-section">
+                <h2 class="section-title">اطلاعات شخصی</h2>
+                <div class="profile-details">
+                    <div class="profile-detail-item">
+                        <div class="profile-detail-icon">🆔</div>
+                        <div class="profile-detail-content">
+                            <span class="profile-detail-label">شناسه کاربری:</span>
+                            <span class="profile-detail-value" id="userId">USER-{{ user.id }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-detail-item">
+                        <div class="profile-detail-icon">👤</div>
+                        <div class="profile-detail-content">
+                            <span class="profile-detail-label">نام و نام خانوادگی:</span>
+                            <span class="profile-detail-value" id="userName">{{ user.full_name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-detail-item">
+                        <div class="profile-detail-icon">📱</div>
+                        <div class="profile-detail-content">
+                            <span class="profile-detail-label">شماره تلفن:</span>
+                            <span class="profile-detail-value" id="userPhone">{{ user.phone }}</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-detail-item">
+                        <div class="profile-detail-icon">📅</div>
+                        <div class="profile-detail-content">
+                            <span class="profile-detail-label">تاریخ عضویت:</span>
+                            <span class="profile-detail-value" id="userJoinDate">{{ user.created_at }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div class="profile-section">
+                <h2 class="section-title">سفارشات من</h2>
+                {% if orders %}
+                <div class="orders-list" id="ordersList">
+                    <!-- Order items will be dynamically loaded here -->
+                    {% for order in orders %}
+                    <a href="{% url 'order-detail' order.id %}" class="order-item">
+                        <div class="order-item-info">
+                            <div class="order-item-header">
+                                <span class="order-item-id">#ORD-{{ order.id }}</span>
+                                <span class="order-item-date">{{ order.created_at }}</span>
+                            </div>
+                            <div class="order-item-amount">
+                                <span class="order-item-label">مبلغ کل:</span>
+                                <span class="order-item-value">{{ order.final_price }} تومان</span>
+                            </div>
+                        </div>
+                        <div class="order-item-arrow">→</div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="no-orders" style="display: none;">
+                    <div class="no-orders-icon">📦</div>
+                    <p>شما هنوز سفارشی ثبت نکرده‌اید</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Profile Actions -->
+<div class="profile-actions">
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='{% url 'logout' %}'">
+        <span>خروج از حساب</span>
+    </button>
+</div>
+
+<div class="profile-actions">
+    <a href="{% url 'home' %}" class="btn btn-primary w-full text-white">
+        <span>بازگشت</span>
+    </a>
+</div>
+
+        </div>
+
+        <div class="auth-decoration">
+            <div class="decoration-circle circle-1"></div>
+            <div class="decoration-circle circle-2"></div>
+            <div class="decoration-circle circle-3"></div>
+        </div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer"></div>
+
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="theme-icon">🌙</span>
+    </button>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+
