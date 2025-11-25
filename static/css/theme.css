@@ -1,0 +1,96 @@
+:root {
+  --background: 240 4.8% 95.9%;
+  --text: 240 10% 3.9%;
+  --warning: 0 72% 51%;
+  --alert: 38 92% 50%;
+  --blue: 215 85% 55%;
+  --cyan: 200 100% 45%;
+  --success: 210 90% 45%;
+  --success-secondary: 220 85% 40%;
+  --muted: 0 0% 100%;
+  --border: 240 5.9% 90%;
+  --primary: 220 90% 55%; /* آبی اصلی */
+  --primary-btn: 221 83% 53%; /* آبی پررنگ‌تر برای دکمه‌ها */
+  --secondary: 240 6% 90%;
+  --ring: 240 10% 3.9%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 240 10% 3.9%;
+  --text: 0 0% 98%;
+  --warning: 0 84% 60%;
+  --alert: 43 96% 56%;
+  --blue: 217 91% 60%;
+  --cyan: 195 98% 52%;
+  --success: 210 90% 60%;
+  --success-secondary: 220 85% 50%;
+  --muted: 220 10% 12%;
+  --border: 240 3.7% 15.9%;
+  --primary: 217 91% 60%; /* آبی درخشان برای حالت تاریک */
+  --primary-btn: 221 83% 53%;
+  --secondary: 240 4% 16%;
+  --ring: 217 90% 60%;
+}
+.messages-container {
+  max-width: 400px; /* کمی بزرگ‌تر */
+  pointer-events: none;
+}
+
+.messages-container .message {
+  background-color: hsl(var(--secondary) / 0.95);
+  color: hsl(var(--text));
+  border-left: 4px solid;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25); /* کمی سایه قوی‌تر */
+  padding: 1rem 1.5rem; /* بزرگ‌تر از قبل */
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* فاصله بیشتر بین آیکون و متن */
+  font-size: 1rem; /* متن بزرگ‌تر */
+  font-weight: 600;
+  pointer-events: auto;
+  transition: all 0.3s ease-in-out, transform 0.2s ease;
+}
+
+/* Hover افکت */
+.messages-container .message:hover {
+  transform: translateX(-2px);
+}
+
+/* Success */
+.messages-container .success {
+  border-color: hsl(var(--success));
+  background-color: hsl(var(--success-secondary) / 0.15);
+  color: hsl(var(--success));
+}
+
+/* Error */
+.messages-container .error {
+  border-color: hsl(var(--alert));
+  background-color: hsl(var(--alert) / 0.15);
+  color: hsl(var(--alert));
+}
+
+/* Warning */
+.messages-container .warning {
+  border-color: hsl(var(--warning));
+  background-color: hsl(var(--warning) / 0.15);
+  color: hsl(var(--warning));
+}
+
+/* Info */
+.messages-container .info {
+  border-color: hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.15);
+  color: hsl(var(--primary));
+}
+
+/* Dark mode */
+.dark .messages-container .message {
+  background-color: hsl(var(--secondary) / 0.2);
+}
+.dark .messages-container .success { background-color: hsl(var(--success-secondary)/0.2);}
+.dark .messages-container .error { background-color: hsl(var(--alert)/0.2);}
+.dark .messages-container .warning { background-color: hsl(var(--warning)/0.2);}
+.dark .messages-container .info { background-color: hsl(var(--primary)/0.2);}

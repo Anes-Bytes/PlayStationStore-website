@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1400" height="320" viewBox="0 0 1400 320" xmlns="http://www.w3.org/2000/svg" lang="fa" dir="rtl">
+  <defs>
+    <style type="text/css"><![CDATA[
+      @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@700;800;900&display=swap');
+      .bg { fill: #0b1115; } /* very dark blue/black */
+      .text { fill: #29b6f6; font-family: "Vazirmatn", "Rubik", "Tahoma", "Helvetica", sans-serif; font-weight: 900; font-size: 160px; letter-spacing: -6px; }
+      .subtitle { fill: white; font-family: "Vazirmatn", "Rubik", sans-serif; font-size: 36px; opacity: 0.85; }
+      .shadow { fill: none; stroke: rgba(0,0,0,0.45); stroke-width: 10px; stroke-linejoin: round; filter: url(#f1); }
+      /* simple drop shadow filter */
+      ]]></style>
+    <filter id="f1" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset dx="0" dy="6" result="o"/>
+      <feGaussianBlur in="o" stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1400" height="320" />
+
+  <!-- optional small controller mark on left -->
+  <g transform="translate(80,40) scale(1.1)">
+    <path d="M60 40 h180 a28 28 0 0 1 28 28 v64 a28 28 0 0 1 -28 28 h-180 a28 28 0 0 1 -28 -28 v-64 a28 28 0 0 1 28 -28 z"
+          fill="#071018" stroke="#29b6f6" stroke-width="8" />
+    <circle cx="120" cy="90" r="12" fill="#29b6f6"/>
+    <circle cx="160" cy="90" r="12" fill="#ffffff"/>
+    <rect x="90" y="60" width="18" height="36" rx="4" fill="#29b6f6"/>
+  </g>
+
+  <!-- Main Persian wordmark -->
+  <text x="760" y="190" text-anchor="middle" class="text" style="dominant-baseline:middle;">
+    پرشین گیم
+  </text>
+
+  <!-- small tagline -->
+  <text x="760" y="250" text-anchor="middle" class="subtitle" style="dominant-baseline:middle;">
+    فروش اکانت و محصولات گیمینگ
+  </text>
+</svg>
